@@ -45,10 +45,20 @@ class MyAppState extends State<MyApp> {
         padding: EdgeInsets.all(0.0),
         children: <Widget>[
           DrawerHeader(
-            child: Text("63 Sales"),
-            decoration: BoxDecoration(
-              color: Colors.blue,
+            child: Container(
+              height: 20.0,
+              width: 50.0,
+              child: Text(
+                "",
+                style:
+                    TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+              ),
             ),
+            decoration: BoxDecoration(
+                color: Colors.blue,
+                image: DecorationImage(
+                    image: AssetImage('assets/sample3.jpeg'),
+                    fit: BoxFit.cover)),
           ),
           ListTile(
             title: Text('Categories 1'),

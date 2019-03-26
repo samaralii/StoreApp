@@ -8,7 +8,7 @@ class Home extends StatelessWidget {
 
   Widget topView() {
     return Container(
-        height: 200.0,
+        height: 170.0,
         child: PageView(
           controller: controller,
           children: <Widget>[
@@ -24,11 +24,8 @@ class Home extends StatelessWidget {
       children: <Widget>[
         Container(
           decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage("assets/sample1.jpg"),
-              fit: BoxFit.cover
-            )
-          ),
+              image: DecorationImage(
+                  image: AssetImage("assets/sample1.jpg"), fit: BoxFit.cover)),
         ),
         Container(
           margin: EdgeInsets.only(left: 17.0),
@@ -78,8 +75,111 @@ class Home extends StatelessWidget {
     print("object");
   }
 
+  Widget storeItemsList() {
+    return Expanded(
+      child: ListView.builder(
+        itemCount: 10,
+        itemBuilder: (context, position) {
+          return storeItems();
+        },
+      ),
+    );
+  }
+
+  Widget storeItems() {
+    return Container(
+      height: 165.0,
+      margin: EdgeInsets.all(8.0),
+      child: Column(
+        children: <Widget>[
+          Container(
+            margin: EdgeInsets.all(5.0),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                    child: Text(
+                  "Item Title",
+                  style: TextStyle(
+                      color: Colors.black, fontWeight: FontWeight.bold),
+                )),
+                Expanded(
+                    child: Text(
+                  "View All",
+                  textAlign: TextAlign.end,
+                  style: TextStyle(
+                      color: Colors.black, fontWeight: FontWeight.bold),
+                )),
+              ],
+            ),
+          ),
+          subItemsList()
+        ],
+      ),
+    );
+  }
+
+  Widget subItemsList() {
+    return Expanded(
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: 20,
+        itemBuilder: (context, index) {
+          return subItems();
+        },
+      ),
+    );
+  }
+
+  Widget subItems() {
+    return Container(
+      margin: EdgeInsets.all(3.0),
+      height: 155.0,
+      width: 100.0,
+      child: Stack(
+        children: <Widget>[
+          Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/sample2.jpg'),
+                fit: BoxFit.cover
+              )
+            ),
+          ),
+          Align(
+            alignment: Alignment.bottomLeft,
+            child: Container(
+                margin: EdgeInsets.all(3.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      "Name",
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12.0,
+                          color: Colors.white),
+                    ),
+                    Text(
+                      ">",
+                      textAlign: TextAlign.end,
+                      style: TextStyle(
+                          fontSize: 12.0,
+                          color: Colors.white,),
+                    ),
+                  ],
+                )),
+          )
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return topView();
+    return Column(
+      children: <Widget>[topView(), storeItemsList()],
+    );
   }
 }
