@@ -1,33 +1,35 @@
 import 'package:flutter/material.dart';
-import 'package:a63sales/features/sub_items/subItems.dart';
-import 'package:a63sales/features/new_arrivals.dart';
 
-class Home extends StatelessWidget {
-  final Color color;
-  Home(this.color);
+class SubItems extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return SubItemsState();
+  }
+}
 
+class SubItemsState extends State<SubItems> {
   final controller = PageController(initialPage: 0);
 
-  Widget topView(BuildContext context) {
+  Widget topView() {
     return Container(
-        height: 170.0,
+        height: 140.0,
         child: PageView(
           controller: controller,
           children: <Widget>[
-            topViewItems(context),
-            topViewItems(context),
-            topViewItems(context),
+            topViewItems(),
+            topViewItems(),
+            topViewItems(),
           ],
         ));
   }
 
-  Widget topViewItems(BuildContext context) {
+  Widget topViewItems() {
     return Stack(
       children: <Widget>[
         Container(
           decoration: BoxDecoration(
               image: DecorationImage(
-                  image: AssetImage("assets/sample1.jpg"), fit: BoxFit.cover)),
+                  image: AssetImage("assets/sample4.jpg"), fit: BoxFit.cover)),
         ),
         Container(
           margin: EdgeInsets.only(left: 17.0),
@@ -35,21 +37,18 @@ class Home extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text("New Arrivals",
+              Text("Swaggers",
                   style: TextStyle(
                       fontSize: 24.0,
                       fontWeight: FontWeight.bold,
                       color: Colors.white)),
               Container(
                 margin: EdgeInsets.only(top: 10.0, bottom: 10.0),
-                child: Text("Check out out fresh new stuff \nfrom 63 Sales",
+                child: Text("Unleash your inner swag,\nin style.",
                     style: TextStyle(fontSize: 12.0, color: Colors.white)),
               ),
               InkWell(
-                onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => NewArrivals()));
-                },
+                onTap: _onTapShopeNow(),
                 child: Container(
                   width: 100.0,
                   height: 25.0,
@@ -76,25 +75,29 @@ class Home extends StatelessWidget {
     );
   }
 
+  _onTapShopeNow() {
+    print("object");
+  }
+
   Widget storeItemsList() {
     return Expanded(
       child: ListView.builder(
         itemCount: 10,
         itemBuilder: (context, position) {
-          return storeItems(context);
+          return storeItems();
         },
       ),
     );
   }
 
-  Widget storeItems(BuildContext context) {
+  Widget storeItems() {
     return Container(
-      height: 190.0,
+      height: 160.0,
       margin: EdgeInsets.all(8.0),
       child: Column(
         children: <Widget>[
           Container(
-            margin: EdgeInsets.all(5.0),
+            margin: EdgeInsets.only(top: 5.0, left: 5.0, bottom: 15.0, right: 5.0),
             child: Row(
               children: <Widget>[
                 Expanded(
@@ -104,17 +107,11 @@ class Home extends StatelessWidget {
                       color: Colors.black, fontWeight: FontWeight.bold),
                 )),
                 Expanded(
-                    child: InkWell(
-                  onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => SubItems()));
-                  },
-                  child: Text(
-                    "View All",
-                    textAlign: TextAlign.end,
-                    style: TextStyle(
-                        color: Colors.black, fontWeight: FontWeight.bold),
-                  ),
+                    child: Text(
+                  "View All",
+                  textAlign: TextAlign.end,
+                  style: TextStyle(
+                      color: Colors.black, fontWeight: FontWeight.bold),
                 )),
               ],
             ),
@@ -142,7 +139,7 @@ class Home extends StatelessWidget {
       onTap: () {},
       child: Container(
         margin: EdgeInsets.only(right: 20.0),
-        height: 185.0,
+        height: 120.0,
         width: 120.0,
         child: Stack(
           children: <Widget>[
@@ -150,7 +147,7 @@ class Home extends StatelessWidget {
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(4.0),
                   image: DecorationImage(
-                      image: AssetImage('assets/sample2.jpg'),
+                      image: AssetImage('assets/sample5.jpeg'),
                       fit: BoxFit.cover)),
             ),
             Align(
@@ -170,7 +167,7 @@ class Home extends StatelessWidget {
                             color: Colors.white),
                       ),
                       Text(
-                        ">",
+                        "",
                         textAlign: TextAlign.end,
                         style: TextStyle(
                           fontSize: 12.0,
@@ -188,8 +185,24 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[topView(context), storeItemsList()],
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Title"),
+        backgroundColor: Colors.white,
+        elevation: 0.0,
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.search,
+              color: Colors.black,
+            ),
+            tooltip: 'Air it',
+          )
+        ],
+      ),
+      body: Column(
+        children: <Widget>[topView(), storeItemsList()],
+      ),
     );
   }
 }
