@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:a63sales/utilz.dart';
 import 'package:flutter/services.dart';
-import 'home.dart';
-import 'cart.dart';
-import 'account.dart';
-import 'wishlist.dart';
+import 'package:a63sales/features/home/home.dart';
+import 'package:a63sales/features/cart/cart.dart';
+import 'package:a63sales/features/account/account.dart';
+import 'package:a63sales/features/wishlist/wishlist.dart';
+
 
 class MyApp extends StatefulWidget {
   @override
@@ -19,7 +20,7 @@ class MyAppState extends State<MyApp> {
   final List<Widget> _children = [
     Home(Colors.red),
     Cart(Colors.yellow),
-    Wishlist(Colors.green),
+    WishList(),
     Account(Colors.blue),
   ];
 
@@ -57,7 +58,7 @@ class MyAppState extends State<MyApp> {
             decoration: BoxDecoration(
                 color: Colors.blue,
                 image: DecorationImage(
-                    image: AssetImage('assets/sample3.jpeg'),
+                    image: AssetImage('assets/sample9.jpg'),
                     fit: BoxFit.cover)),
           ),
           ListTile(
