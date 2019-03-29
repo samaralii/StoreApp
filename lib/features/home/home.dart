@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:a63sales/features/sub_items/subItems.dart';
 import 'package:a63sales/features/new_arrivals.dart';
 
-
 class Home extends StatelessWidget {
   final Color color;
   Home(this.color);
