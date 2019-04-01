@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:a63sales/features/detail/detail.dart';
 
 class SubItems extends StatefulWidget {
   @override
@@ -136,7 +137,11 @@ class SubItemsState extends State<SubItems> {
 
   Widget subItems(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+
+        Navigator.push(context, MaterialPageRoute(builder: (context) => Detail()));
+
+      },
       child: Container(
         margin: EdgeInsets.only(right: 20.0),
         height: 120.0,
