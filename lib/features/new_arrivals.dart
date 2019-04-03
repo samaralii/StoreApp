@@ -39,7 +39,7 @@ Widget _itemBody() {
   return Column(
     children: <Widget>[
       Container(
-        height: 270.0,
+        height: 240.0,
         margin: EdgeInsets.all(5.0),
         child: Stack(
           children: <Widget>[

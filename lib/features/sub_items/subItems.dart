@@ -9,6 +9,15 @@ class SubItems extends StatefulWidget {
 }
 
 class SubItemsState extends State<SubItems> {
+
+  final List<String> _titles = [
+    "Top Wear",
+    "Bottom Wear",
+    "Tees",
+    "Shirts"
+  ];
+  final List<String> _name = ["Trousers", "Shorts", "Denims", "Suits"];
+
   final controller = PageController(initialPage: 0);
 
   Widget topView() {
@@ -61,10 +70,11 @@ class SubItemsState extends State<SubItems> {
                         "SHOP NOW",
                         style: TextStyle(color: Colors.black, fontSize: 11.0),
                       ),
-                      Text(
-                        ">",
-                        style: TextStyle(color: Colors.black, fontSize: 15.0),
-                      ),
+                      // Text(
+                      //   ">",
+                      //   style: TextStyle(color: Colors.black, fontSize: 15.0),
+                      // ),
+                      Icon(Icons.arrow_right)
                     ],
                   ),
                 ),
@@ -83,27 +93,28 @@ class SubItemsState extends State<SubItems> {
   Widget storeItemsList() {
     return Expanded(
       child: ListView.builder(
-        itemCount: 10,
+        itemCount: 4,
         itemBuilder: (context, position) {
-          return storeItems();
+          return storeItems(position);
         },
       ),
     );
   }
 
-  Widget storeItems() {
+  Widget storeItems(int index) {
     return Container(
       height: 160.0,
       margin: EdgeInsets.all(8.0),
       child: Column(
         children: <Widget>[
           Container(
-            margin: EdgeInsets.only(top: 5.0, left: 5.0, bottom: 15.0, right: 5.0),
+            margin:
+                EdgeInsets.only(top: 5.0, left: 5.0, bottom: 15.0, right: 5.0),
             child: Row(
               children: <Widget>[
                 Expanded(
                     child: Text(
-                  "Item Title",
+                  _titles[index],
                   style: TextStyle(
                       color: Colors.black, fontWeight: FontWeight.bold),
                 )),
@@ -127,20 +138,19 @@ class SubItemsState extends State<SubItems> {
     return Expanded(
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: 20,
+        itemCount: 4,
         itemBuilder: (context, index) {
-          return subItems(context);
+          return subItems(context, index);
         },
       ),
     );
   }
 
-  Widget subItems(BuildContext context) {
+  Widget subItems(BuildContext context, int index) {
     return InkWell(
       onTap: () {
-
-        Navigator.push(context, MaterialPageRoute(builder: (context) => Detail()));
-
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => Detail()));
       },
       child: Container(
         margin: EdgeInsets.only(right: 20.0),
@@ -164,7 +174,7 @@ class SubItemsState extends State<SubItems> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       Text(
-                        "Name",
+                        _name[index],
                         textAlign: TextAlign.start,
                         style: TextStyle(
                             fontWeight: FontWeight.bold,

@@ -8,6 +8,14 @@ class Home extends StatelessWidget {
 
   final controller = PageController(initialPage: 0);
 
+  final List<String> _titles = [
+    "What's new",
+    "Spring Summer 2019",
+    "Swagger",
+    "Winter"
+  ];
+  final List<String> _name = ["Men", "Women", "Girls", "Boys"];
+
   Widget topView(BuildContext context) {
     return Container(
         height: 200.0,
@@ -61,10 +69,11 @@ class Home extends StatelessWidget {
                         "SHOP NOW",
                         style: TextStyle(color: Colors.black, fontSize: 11.0),
                       ),
-                      Text(
-                        ">",
-                        style: TextStyle(color: Colors.black, fontSize: 15.0),
-                      ),
+                      // Text(
+                      //   ">",
+                      //   style: TextStyle(color: Colors.black, fontSize: 15.0),
+                      // ),
+                      Icon(Icons.arrow_right),
                     ],
                   ),
                 ),
@@ -79,15 +88,15 @@ class Home extends StatelessWidget {
   Widget storeItemsList() {
     return Expanded(
       child: ListView.builder(
-        itemCount: 10,
-        itemBuilder: (context, position) {
-          return storeItems(context);
+        itemCount: 3,
+        itemBuilder: (context, index) {
+          return storeItems(context, index);
         },
       ),
     );
   }
 
-  Widget storeItems(BuildContext context) {
+  Widget storeItems(BuildContext context, int index) {
     return Container(
       height: 190.0,
       margin: EdgeInsets.all(8.0),
@@ -99,7 +108,7 @@ class Home extends StatelessWidget {
               children: <Widget>[
                 Expanded(
                     child: Text(
-                  "Item Title",
+                  _titles[index],
                   style: TextStyle(
                       color: Colors.black, fontWeight: FontWeight.bold),
                 )),
@@ -129,15 +138,15 @@ class Home extends StatelessWidget {
     return Expanded(
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: 20,
+        itemCount: 4,
         itemBuilder: (context, index) {
-          return subItems(context);
+          return subItems(context, index);
         },
       ),
     );
   }
 
-  Widget subItems(BuildContext context) {
+  Widget subItems(BuildContext context, int index) {
     return InkWell(
       onTap: () {},
       child: Container(
@@ -158,25 +167,29 @@ class Home extends StatelessWidget {
               child: Container(
                   margin: EdgeInsets.all(3.0),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      Text(
-                        "Name",
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12.0,
-                            color: Colors.white),
-                      ),
-                      Text(
-                        ">",
-                        textAlign: TextAlign.end,
-                        style: TextStyle(
-                          fontSize: 12.0,
-                          color: Colors.white,
+                      Container(
+                        margin: EdgeInsets.only(left: 3.0),
+                        child: Text(
+                          _name[index],
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 12.0,
+                              color: Colors.white),
                         ),
                       ),
+                      // Text(
+                      //   ">",
+                      //   textAlign: TextAlign.end,
+                      //   style: TextStyle(
+                      //     fontSize: 12.0,
+                      //     color: Colors.white,
+                      //   ),
+                      // ),
+                      Icon(Icons.arrow_right, color: Colors.white)
                     ],
                   )),
             )
