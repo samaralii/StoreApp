@@ -9,13 +9,7 @@ class SubItems extends StatefulWidget {
 }
 
 class SubItemsState extends State<SubItems> {
-
-  final List<String> _titles = [
-    "Top Wear",
-    "Bottom Wear",
-    "Tees",
-    "Shirts"
-  ];
+  final List<String> _titles = ["Top Wear", "Bottom Wear", "Tees", "Shirts"];
   final List<String> _name = ["Trousers", "Shorts", "Denims", "Suits"];
 
   final controller = PageController(initialPage: 0);

@@ -5,7 +5,10 @@ import 'package:a63sales/features/home/home.dart';
 import 'package:a63sales/features/cart/cart.dart';
 import 'package:a63sales/features/account/account.dart';
 import 'package:a63sales/features/wishlist/wishlist.dart';
+import 'package:a63sales/models/categories.dart';
 
+import 'dart:convert' as convert;
+import 'package:http/http.dart' as http;
 
 class MyApp extends StatefulWidget {
   @override
@@ -17,6 +20,8 @@ class MyApp extends StatefulWidget {
 class MyAppState extends State<MyApp> {
   int _selectedIndex = 0;
 
+  List<ObjCategories> categories = [];
+
   final List<Widget> _children = [
     Home(Colors.red),
     Cart(Colors.yellow),
@@ -25,6 +30,30 @@ class MyAppState extends State<MyApp> {
   ];
 
   final List<String> _titles = ["Home", "Cart", "Wishlist", "Account"];
+
+  _getCategories() async {
+    var url = "http://hrspidersystem.com/63sales/Api/categories";
+
+    var response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      var jsonResponse = convert.jsonDecode(response.body);
+      var status = ObjStatus.fromJson(jsonResponse);
+      print(status.status);
+
+      setState(() {
+        this.categories = status.data.categories;
+      });
+    } else {
+      print("failed");
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    _getCategories();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,37 +71,36 @@ class MyAppState extends State<MyApp> {
 
   Widget appDrawer() {
     return Drawer(
-      child: ListView(
-        padding: EdgeInsets.all(0.0),
+        child: ListView.builder(
+      itemCount: this.categories == null ? 1 : this.categories.length + 1,
+      itemBuilder: (context, index) {
+        if (index == 0) {
+          return appDrawerHeader();
+        }
+
+        index -= 1;
+
+        return InkWell(
+          onTap: () {},
+          child: ListTile(
+            title: Text("${this.categories[index].title}"),
+          ),
+        );
+      },
+    ));
+  }
+
+  Widget appDrawerHeader() {
+    return Container(
+      child: Stack(
         children: <Widget>[
-          DrawerHeader(
-            child: Container(
-              height: 20.0,
-              width: 50.0,
-              child: Text(
-                "",
-                style:
-                    TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
-              ),
-            ),
+          Container(
+            height: 200.0,
             decoration: BoxDecoration(
-                color: Colors.blue,
                 image: DecorationImage(
                     image: AssetImage('assets/sample9.jpg'),
                     fit: BoxFit.cover)),
-          ),
-          ListTile(
-            title: Text('Categories 1'),
-          ),
-          ListTile(
-            title: Text('Categories 2'),
-          ),
-          ListTile(
-            title: Text('Categories 3'),
-          ),
-          ListTile(
-            title: Text('Categories 4'),
-          ),
+          )
         ],
       ),
     );
