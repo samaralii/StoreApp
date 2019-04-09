@@ -23,7 +23,7 @@ class MyAppState extends State<MyApp> {
   List<ObjCategories> categories = [];
 
   final List<Widget> _children = [
-    Home(Colors.red),
+    Home(),
     Cart(Colors.yellow),
     WishList(),
     Account(Colors.blue),

@@ -2,13 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:a63sales/features/detail/detail.dart';
 
 class SubItems extends StatefulWidget {
+
+  final String title;
+
+  SubItems(this.title);
+
   @override
   State<StatefulWidget> createState() {
-    return SubItemsState();
+    return SubItemsState(title);
   }
 }
 
 class SubItemsState extends State<SubItems> {
+
+  final String title;
+
+  SubItemsState(this.title);
+
   final List<String> _titles = ["Top Wear", "Bottom Wear", "Tees", "Shirts"];
   final List<String> _name = ["Trousers", "Shorts", "Denims", "Suits"];
 
@@ -196,7 +206,7 @@ class SubItemsState extends State<SubItems> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Title"),
+        title: Text(title),
         backgroundColor: Colors.white,
         elevation: 0.0,
         actions: <Widget>[

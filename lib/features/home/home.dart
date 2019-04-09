@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:a63sales/features/sub_items/subItems.dart';
 import 'package:a63sales/features/new_arrivals.dart';
+import 'package:a63sales/models/categories.dart';
 
-class Home extends StatelessWidget {
-  final Color color;
-  Home(this.color);
+import 'dart:convert' as convert;
+import 'package:http/http.dart' as http;
 
+class Home extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
+    return HomeState();
+  }
+}
+
+class HomeState extends State<Home> {
   final controller = PageController(initialPage: 0);
 
   final List<String> _titles = [
@@ -15,6 +24,32 @@ class Home extends StatelessWidget {
     "Winter"
   ];
   final List<String> _name = ["Men", "Women", "Girls", "Boys"];
+
+  List<ObjCategories> categories = [];
+
+  _getCategories() async {
+    var url = "http://hrspidersystem.com/63sales/Api/categories";
+
+    var response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      var jsonResponse = convert.jsonDecode(response.body);
+      var status = ObjStatus.fromJson(jsonResponse);
+      print(status.status);
+
+      setState(() {
+        this.categories = status.data.categories;
+      });
+    } else {
+      print("failed");
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    _getCategories();
+  }
 
   Widget topView(BuildContext context) {
     return Container(
@@ -88,7 +123,7 @@ class Home extends StatelessWidget {
   Widget storeItemsList() {
     return Expanded(
       child: ListView.builder(
-        itemCount: 3,
+        itemCount: 1,
         itemBuilder: (context, index) {
           return storeItems(context, index);
         },
@@ -115,8 +150,8 @@ class Home extends StatelessWidget {
                 Expanded(
                     child: InkWell(
                   onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => SubItems()));
+                    // Navigator.push(context,
+                    //     MaterialPageRoute(builder: (context) => SubItems()));
                   },
                   child: Text(
                     "View All",
@@ -138,7 +173,7 @@ class Home extends StatelessWidget {
     return Expanded(
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: 4,
+        itemCount: categories.length,
         itemBuilder: (context, index) {
           return subItems(context, index);
         },
@@ -148,7 +183,12 @@ class Home extends StatelessWidget {
 
   Widget subItems(BuildContext context, int index) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => SubItems(categories[index].title)));
+      },
       child: Container(
         margin: EdgeInsets.only(right: 20.0),
         height: 185.0,
@@ -159,7 +199,8 @@ class Home extends StatelessWidget {
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(4.0),
                   image: DecorationImage(
-                      image: AssetImage('assets/sample2.jpg'),
+                      // image: AssetImage('assets/sample2.jpg'),
+                      image: NetworkImage(categories[index].image),
                       fit: BoxFit.cover)),
             ),
             Align(
@@ -173,7 +214,7 @@ class Home extends StatelessWidget {
                       Container(
                         margin: EdgeInsets.only(left: 3.0),
                         child: Text(
-                          _name[index],
+                          categories[index].title,
                           textAlign: TextAlign.start,
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
