@@ -28,18 +28,39 @@ class ObjCategories {
   int id;
   String title;
   String image;
+  List<Tags> tags;
 
   ObjCategories({
     this.id,
     this.title,
     this.image,
+    this.tags,
   });
 
-  factory ObjCategories.fromJson(Map<String, dynamic> parsedJson) {
-    return ObjCategories(
+  ObjCategories.fromJson(Map<String, dynamic> parsedJson) {
+    this.id = parsedJson['id'];
+    this.title = parsedJson['title'];
+    this.image = parsedJson['image'];
+    final _tagList = parsedJson['tags'];
+
+    this.tags = [];
+
+    for (var item in _tagList) {
+      tags.add(Tags.fromJson(item));
+    }
+  }
+}
+
+class Tags {
+  int id;
+  String title;
+
+  Tags({this.id, this.title});
+
+  factory Tags.fromJson(Map<String, dynamic> parsedJson) {
+    return Tags(
       id: parsedJson['id'],
       title: parsedJson['title'],
-      image: parsedJson['image'],
     );
   }
 }

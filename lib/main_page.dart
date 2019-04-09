@@ -80,14 +80,37 @@ class MyAppState extends State<MyApp> {
 
         index -= 1;
 
-        return InkWell(
-          onTap: () {},
-          child: ListTile(
-            title: Text("${this.categories[index].title}"),
-          ),
+        // return InkWell(
+        //   onTap: () {},
+        //   child: ListTile(
+        //     title: Text("${this.categories[index].title}"),
+        //   ),
+        // );
+
+        return ExpansionTile(
+          title: Text("${this.categories[index].title}"),
+          children: <Widget>[
+            Column(
+              children: _buildExpandableContent(this.categories[index].tags),
+            ),
+          ],
         );
       },
     ));
+  }
+
+  _buildExpandableContent(List<Tags> list) {
+    List<Widget> columnContent = [];
+
+    for (var i = 0; i < list.length; i++) {
+      columnContent.add(
+        ListTile(
+          title: Text(list[i].title), 
+        )
+      );
+    }
+
+    return columnContent;
   }
 
   Widget appDrawerHeader() {

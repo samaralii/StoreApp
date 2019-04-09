@@ -121,7 +121,9 @@ class HomeState extends State<Home> {
   }
 
   Widget storeItemsList() {
-    return Expanded(
+    return Container(
+      margin: EdgeInsets.only(bottom: 20.0),
+      height: 190,
       child: ListView.builder(
         itemCount: 1,
         itemBuilder: (context, index) {
@@ -187,7 +189,7 @@ class HomeState extends State<Home> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => SubItems(categories[index].title)));
+                builder: (context) => SubItems(categories[index])));
       },
       child: Container(
         margin: EdgeInsets.only(right: 20.0),
@@ -240,10 +242,18 @@ class HomeState extends State<Home> {
     );
   }
 
+
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[topView(context), storeItemsList()],
+    return SingleChildScrollView(
+          child: Column(
+        children: <Widget>[
+          topView(context),
+          storeItemsList(),
+          topView(context),
+        ],
+      ),
     );
   }
 }
