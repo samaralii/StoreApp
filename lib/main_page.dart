@@ -23,7 +23,7 @@ class MyAppState extends State<MyApp> {
   List<ObjCategories> categories = [];
 
   final List<Widget> _children = [
-    Home(),
+    Home(Colors.yellow),
     Cart(Colors.yellow),
     WishList(),
     Account(Colors.blue),
@@ -51,7 +51,7 @@ class MyAppState extends State<MyApp> {
 
   @override
   void initState() {
-    // TODO: implement initState
+    super.initState();
     _getCategories();
   }
 

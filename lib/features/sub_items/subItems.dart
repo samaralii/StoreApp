@@ -1,25 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:a63sales/features/detail/detail.dart';
-import 'package:a63sales/models/categories.dart';
 
 
 class SubItems extends StatefulWidget {
-  final ObjCategories categories;
+  // final ObjItems categories;
 
-  SubItems(this.categories);
+  // SubItems(this.categories);
 
   @override
   State<StatefulWidget> createState() {
-    return SubItemsState(categories);
+    return SubItemsState();
   }
 }
 
 class SubItemsState extends State<SubItems> {
-  final ObjCategories categories;
+  // final ObjCategories categories;
 
-  SubItemsState(this.categories);
+  // SubItemsState(this.categories);
 
-  final List<String> _titles = ["Top Wear", "Bottom Wear", "Tees", "Shirts"];
   final List<String> _name = ["Trousers", "Shorts", "Denims", "Suits"];
 
   final controller = PageController(initialPage: 0);
@@ -101,7 +99,7 @@ class SubItemsState extends State<SubItems> {
       crossAxisSpacing: 0,
       mainAxisSpacing: 0,
       crossAxisCount: 3,
-      children: List.generate(categories.tags.length, (index) {
+      children: List.generate(3, (index) {
         return _itemBody(index);
       }),
     ));
@@ -127,7 +125,7 @@ class SubItemsState extends State<SubItems> {
                 child: Container(
                     margin: EdgeInsets.all(5.0),
                     child: Text(
-                      categories.tags[index].title,
+                      "Title",
                       style: TextStyle(color: Colors.white),
                     )),
               )
@@ -302,7 +300,7 @@ class SubItemsState extends State<SubItems> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(this.categories.title),
+        title: Text("Title"),
         backgroundColor: Colors.white,
         elevation: 0.0,
         actions: <Widget>[
