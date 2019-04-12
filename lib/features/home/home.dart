@@ -64,6 +64,76 @@ class HomeState extends State<Home> {
         ));
   }
 
+   Widget bottomView(BuildContext context) {
+    return Container(
+        height: 180.0,
+        margin: EdgeInsets.all(8.0),
+        child: PageView(
+          controller: controller,
+          children: <Widget>[
+            topViewItems(context),
+            topViewItems(context),
+            topViewItems(context),
+          ],
+        ));
+  }
+
+  Widget bottomViewItems(BuildContext context) {
+    return Stack(
+      children: <Widget>[
+        Container(
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage("assets/sample1.jpg"), fit: BoxFit.cover)),
+        ),
+        Container(
+          margin: EdgeInsets.only(left: 17.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text("New Arrivals",
+                  style: TextStyle(
+                      fontSize: 24.0,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white)),
+              Container(
+                margin: EdgeInsets.only(top: 10.0, bottom: 10.0),
+                child: Text("Check out out fresh new stuff \nfrom 63 Sales",
+                    style: TextStyle(fontSize: 12.0, color: Colors.white)),
+              ),
+              InkWell(
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => NewArrivals()));
+                },
+                child: Container(
+                  width: 100.0,
+                  height: 25.0,
+                  color: Colors.white,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Text(
+                        "SHOP NOW",
+                        style: TextStyle(color: Colors.black, fontSize: 11.0),
+                      ),
+                      // Text(
+                      //   ">",
+                      //   style: TextStyle(color: Colors.black, fontSize: 15.0),
+                      // ),
+                      Icon(Icons.arrow_right),
+                    ],
+                  ),
+                ),
+              )
+            ],
+          ),
+        )
+      ],
+    );
+  }
+
   Widget topViewItems(BuildContext context) {
     return Stack(
       children: <Widget>[
@@ -251,7 +321,7 @@ class HomeState extends State<Home> {
         children: <Widget>[
           topView(context),
           storeItemsList(),
-          topView(context),
+          bottomView(context),
         ],
       ),
     );
