@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:a63sales/features/sub_items/subItems.dart';
 import 'package:a63sales/features/new_arrivals.dart';
 import 'package:a63sales/models/home.dart';
+import 'package:a63sales/features/detail/detail.dart';
 
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
@@ -152,8 +153,8 @@ class HomeState extends State<Home> {
                 Expanded(
                     child: InkWell(
                   onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => SubItems()));
+                    // Navigator.push(context,
+                    //     MaterialPageRoute(builder: (context) => SubItems()));
                   },
                   child: Text(
                     "View All",
@@ -185,7 +186,10 @@ class HomeState extends State<Home> {
 
   Widget subItems(BuildContext context, ObjItems data) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => Detail(data.id)));
+      },
       child: Container(
         margin: EdgeInsets.only(right: 20.0),
         height: 185.0,
@@ -210,7 +214,7 @@ class HomeState extends State<Home> {
                         margin: EdgeInsets.only(left: 3.0),
                         child: Container(
                           width: 120,
-                                                  child: Text(
+                          child: Text(
                             data.itemTitle,
                             textAlign: TextAlign.start,
                             style: TextStyle(

@@ -139,8 +139,8 @@ class SubItemsState extends State<SubItems> {
   Widget subItems(BuildContext context, int index) {
     return InkWell(
       onTap: () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => Detail()));
+        // Navigator.push(
+        //     context, MaterialPageRoute(builder: (context) => Detail()));
       },
       child: Container(
         margin: EdgeInsets.only(right: 20.0),
