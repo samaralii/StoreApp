@@ -20,6 +20,7 @@ class Detail extends StatefulWidget {
 class DetailState extends State<Detail> {
   int itemId;
   DetailDataObj data;
+  var _isLoading = false;
 
   final controller = PageController(initialPage: 0);
 
@@ -28,6 +29,12 @@ class DetailState extends State<Detail> {
   String html = '<body>Hello world! <a href="www.html5rocks.com">HTML5 rocks!';
 
   _getItemDetail() async {
+
+    setState(() {
+    _isLoading = true;      
+    });
+
+
     print("Item Id = $itemId");
     var url = "http://hrspidersystem.com/63sales/api/details?item_id=$itemId";
 
@@ -39,6 +46,7 @@ class DetailState extends State<Detail> {
       print("Detail : ${status.status}");
 
       setState(() {
+        _isLoading = false;
         this.data = status.data;
       });
     } else {
@@ -85,14 +93,6 @@ class DetailState extends State<Detail> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               topView(context),
-              // Container(
-              //   height: 400.0,
-              //   decoration: BoxDecoration(
-              //       image: DecorationImage(
-              //           image: AssetImage('assets/sample11.jpg'),
-              //           fit: BoxFit.cover)),
-              // ),
-
               Container(
                 margin: EdgeInsets.only(left: 10.0, top: 10.0, right: 10.0),
                 child: Row(
@@ -122,23 +122,11 @@ class DetailState extends State<Detail> {
                         "Regular Fit",
                         style: TextStyle(color: Colors.grey),
                       ))),
-              Align(
-                  alignment: Alignment.topLeft,
-                  child: Container(
-                      margin:
-                          EdgeInsets.only(left: 10.0, top: 20.0, bottom: 10.0),
-                      child: Text(
-                        "Sizes",
-                        style: TextStyle(color: Colors.grey),
-                      ))),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  sizeButton(),
-                  sizeButton(),
-                  sizeButton(),
-                ],
+
+              Column(
+                children: _buildAttrItems(),
               ),
+
               Align(
                   alignment: Alignment.topLeft,
                   child: Container(
@@ -213,19 +201,65 @@ class DetailState extends State<Detail> {
             ),
           ),
         ),
+        Positioned(
+            child: _isLoading
+                ? Container(
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                    color: Colors.white.withOpacity(0.8),
+                  )
+                : Container()),
       ],
     );
   }
 
-  Widget sizeButton() {
+  _buildAttrItems() {
+    List<Widget> columnContent = [];
+
+    if (this.data != null &&
+        this.data.item != null &&
+        this.data.item.attributes != null) {
+      for (int i = 0; i < this.data.item.attributes.length; i++) {
+        columnContent.add(Column(
+          children: <Widget>[
+            Align(
+                alignment: Alignment.topLeft,
+                child: Container(
+                    margin:
+                        EdgeInsets.only(left: 10.0, top: 20.0, bottom: 10.0),
+                    child: Text(
+                      this.data.item.attributes[i].name,
+                      style: TextStyle(color: Colors.grey),
+                    ))),
+            Container(
+              height: 35.0,
+              child: ListView.builder(
+                itemCount: this.data.item.attributes[i].attr.length,
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, index) {
+                  return sizeButton(this.data.item.attributes[i].attr[index]);
+                },
+              ),
+            ),
+          ],
+        ));
+      }
+    }
+
+    return columnContent;
+  }
+
+  Widget sizeButton(String name) {
     return Container(
-      height: 30.0,
+      margin: EdgeInsets.all(5.0),
+      height: 35.0,
       width: 80.0,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(4.0),
           border: Border.all(color: Colors.black, width: 1.0)),
       child: Center(
-        child: Text("UK44"),
+        child: Text(name),
       ),
     );
   }

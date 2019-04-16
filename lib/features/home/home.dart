@@ -19,6 +19,8 @@ class Home extends StatefulWidget {
 
 class HomeState extends State<Home> {
   final controller = PageController(initialPage: 0);
+  var _isLoading = false;
+
 
   final List<String> _titles = [
     "What's new",
@@ -31,6 +33,11 @@ class HomeState extends State<Home> {
   List<ObjPages> listpages = [];
 
   _getCategories() async {
+
+    setState(() {
+      _isLoading = true;
+    });
+
     var url = "http://hrspidersystem.com/63sales/Api/home";
 
     var response = await http.get(url);
@@ -41,6 +48,7 @@ class HomeState extends State<Home> {
       print("Home : ${status.status}");
 
       setState(() {
+        _isLoading = false;
         this.listpages = status.data.pages;
       });
     } else {
@@ -125,11 +133,25 @@ class HomeState extends State<Home> {
 
   Widget storeItemsList() {
     return Expanded(
-      child: ListView.builder(
-        itemCount: listpages.length,
-        itemBuilder: (context, index) {
-          return storeItems(context, index);
-        },
+      child: Stack(
+        children: <Widget>[
+          ListView.builder(
+            itemCount: listpages.length,
+            itemBuilder: (context, index) {
+              return storeItems(context, index);
+            },
+          ),
+
+          Positioned(
+            child: _isLoading
+                ? Container(
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                    color: Colors.white.withOpacity(0.8),
+                  )
+                : Container()),
+        ],
       ),
     );
   }

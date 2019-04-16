@@ -26,21 +26,30 @@ class DetailItemObj {
   String description;
   int price;
   List<DetailImageObj> images;
-
+  List<DetailAttributeObj> attributes;
 
   DetailItemObj({this.title, this.description, this.price});
 
- DetailItemObj.fromJson(Map<String, dynamic> parsedJson) {
-    
-      this.title = parsedJson['title'];
-      this.description = parsedJson['description'];
-      this.price = parsedJson['price'];
-      this.images = [];
-      var _imagesList = parsedJson['images'];
+  DetailItemObj.fromJson(Map<String, dynamic> parsedJson) {
+    this.title = parsedJson['title'];
+    this.description = parsedJson['description'];
+    this.price = parsedJson['price'];
 
-      for (var item in _imagesList) {
-        images.add(DetailImageObj.fromJson(item)); 
-      } 
+    this.images = [];
+    var _imagesList = parsedJson['images'];
+
+    this.attributes = [];
+    var _attrList = parsedJson['attributes'];
+
+    for (var item in _imagesList) {
+      images.add(DetailImageObj.fromJson(item));
+    }
+
+
+    for (var item in _attrList) {
+      attributes.add(DetailAttributeObj.fromJson(item));
+    }
+
 
   }
 }
@@ -49,8 +58,22 @@ class DetailImageObj {
   String url;
   DetailImageObj({this.url});
   factory DetailImageObj.fromJson(Map<String, dynamic> parsedJson) {
-    return DetailImageObj(
-      url: parsedJson['url']
-    );
+    return DetailImageObj(url: parsedJson['url']);
+  }
+}
+
+class DetailAttributeObj {
+  String name;
+  String value;
+
+  List<String> attr;
+
+  DetailAttributeObj({this.name, this.value});
+
+  DetailAttributeObj.fromJson(Map<String, dynamic> parsedJson) {
+    name = parsedJson['name'];
+    value = parsedJson['value'];
+    attr = [];
+    attr = value.split(',');
   }
 }
