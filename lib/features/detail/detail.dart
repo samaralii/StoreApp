@@ -8,12 +8,13 @@ import 'package:http/http.dart' as http;
 
 class Detail extends StatefulWidget {
   int itemId;
+  DetailDataObj data;
 
-  Detail(this.itemId);
+  Detail(this.itemId, this.data);
 
   @override
   State<StatefulWidget> createState() {
-    return DetailState(this.itemId);
+    return DetailState(this.itemId, this.data);
   }
 }
 
@@ -21,19 +22,16 @@ class DetailState extends State<Detail> {
   int itemId;
   DetailDataObj data;
   var _isLoading = false;
+  var showButtons = false;
 
   final controller = PageController(initialPage: 0);
 
-  DetailState(this.itemId);
-
-  String html = '<body>Hello world! <a href="www.html5rocks.com">HTML5 rocks!';
+  DetailState(this.itemId, this.data);
 
   _getItemDetail() async {
-
     setState(() {
-    _isLoading = true;      
+      _isLoading = true;
     });
-
 
     print("Item Id = $itemId");
     var url = "http://hrspidersystem.com/63sales/api/details?item_id=$itemId";
@@ -47,6 +45,7 @@ class DetailState extends State<Detail> {
 
       setState(() {
         _isLoading = false;
+        showButtons = true;
         this.data = status.data;
       });
     } else {
@@ -57,7 +56,15 @@ class DetailState extends State<Detail> {
   @override
   void initState() {
     super.initState();
-    _getItemDetail();
+
+    if (data == null) {
+      _getItemDetail();
+    } else {
+      print(data.item.attributes[0].attr.length);
+      for (var item in data.item.attributes[0].attr) {
+        print(item.isSelected);
+      }
+    }
   }
 
   Widget topView(BuildContext context) {
@@ -152,55 +159,69 @@ class DetailState extends State<Detail> {
             ],
           ),
         ),
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: Container(
-            margin: EdgeInsets.all(10.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                InkWell(
-                  onTap: () {},
-                  child: Container(
-                    height: 40.0,
-                    width: 150.0,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(2.0),
-                        border: Border.all(color: Colors.grey, width: 0.5),
-                        color: Colors.white),
-                    child: Center(
-                        child: Text(
-                      "Add To Wishlist",
-                      style: TextStyle(
-                          fontSize: 13.0,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold),
-                    )),
+        this.showButtons == true
+            ? Align(
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  margin: EdgeInsets.only(top: 10.0),
+                  height: 50.0,
+                  color: Colors.white,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      InkWell(
+                        onTap: () {
+                          Utilz.addToWishlist(this.data).then((_) {
+                            _showDialog("Successfully added to Wishlist");
+                          });
+                        },
+                        child: Container(
+                          height: 40.0,
+                          width: 150.0,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(2.0),
+                              border:
+                                  Border.all(color: Colors.grey, width: 0.5),
+                              color: Colors.white),
+                          child: Center(
+                              child: Text(
+                            "Add To Wishlist",
+                            style: TextStyle(
+                                fontSize: 13.0,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          )),
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          Utilz.addToCart(this.data).then((_) {
+                            _showDialog("Successfully added to Wishlist");
+                          });
+                        },
+                        child: Container(
+                          height: 40.0,
+                          width: 150.0,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(2.0),
+                              border:
+                                  Border.all(color: Colors.grey, width: 0.5),
+                              color: Colors.yellow),
+                          child: Center(
+                              child: Text(
+                            "Add To Cart",
+                            style: TextStyle(
+                                fontSize: 13.0,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          )),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                InkWell(
-                  onTap: () {},
-                  child: Container(
-                    height: 40.0,
-                    width: 150.0,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(2.0),
-                        border: Border.all(color: Colors.grey, width: 0.5),
-                        color: Colors.yellow),
-                    child: Center(
-                        child: Text(
-                      "Add To Cart",
-                      style: TextStyle(
-                          fontSize: 13.0,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold),
-                    )),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
+              )
+            : Container(),
         Positioned(
             child: _isLoading
                 ? Container(
@@ -212,6 +233,25 @@ class DetailState extends State<Detail> {
                 : Container()),
       ],
     );
+  }
+
+  void _showDialog(String content) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Done"),
+            content: Text(content),
+            actions: <Widget>[
+              FlatButton(
+                child: Text("OK"),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              )
+            ],
+          );
+        });
   }
 
   _buildAttrItems() {
@@ -238,7 +278,7 @@ class DetailState extends State<Detail> {
                 itemCount: this.data.item.attributes[i].attr.length,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) {
-                  return sizeButton(this.data.item.attributes[i].attr[index]);
+                  return attrButton(this.data.item.attributes[i].attr, index);
                 },
               ),
             ),
@@ -250,16 +290,26 @@ class DetailState extends State<Detail> {
     return columnContent;
   }
 
-  Widget sizeButton(String name) {
-    return Container(
-      margin: EdgeInsets.all(5.0),
-      height: 35.0,
-      width: 80.0,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(4.0),
-          border: Border.all(color: Colors.black, width: 1.0)),
-      child: Center(
-        child: Text(name),
+  Widget attrButton(List<AttrObj> attrList, index) {
+    return InkWell(
+      onTap: () {
+        setState(() {
+          attrList.forEach((item) => item.isSelected = false);
+          attrList[index].isSelected = true;
+        });
+      },
+      child: Container(
+        margin: EdgeInsets.all(5.0),
+        height: 35.0,
+        width: 80.0,
+        decoration: BoxDecoration(
+            color:
+                attrList[index].isSelected == true ? Colors.blue : Colors.white,
+            borderRadius: BorderRadius.circular(4.0),
+            border: Border.all(color: Colors.black, width: 1.0)),
+        child: Center(
+          child: Text(attrList[index].name),
+        ),
       ),
     );
   }
@@ -267,7 +317,9 @@ class DetailState extends State<Detail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text(data == null ? "" : data.item.title),
+      ),
       body: body(),
     );
   }

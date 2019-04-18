@@ -3,6 +3,8 @@ import 'package:a63sales/features/sub_items/subItems.dart';
 import 'package:a63sales/features/new_arrivals.dart';
 import 'package:a63sales/models/home.dart';
 import 'package:a63sales/features/detail/detail.dart';
+import 'package:a63sales/web_services.dart';
+import 'package:a63sales/models/sliderObj.dart';
 
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
@@ -21,7 +23,6 @@ class HomeState extends State<Home> {
   final controller = PageController(initialPage: 0);
   var _isLoading = false;
 
-
   final List<String> _titles = [
     "What's new",
     "Spring Summer 2019",
@@ -31,9 +32,9 @@ class HomeState extends State<Home> {
   final List<String> _name = ["Men", "Women", "Girls", "Boys"];
 
   List<ObjPages> listpages = [];
+  List<SliderObj> listSlider = [];
 
   _getCategories() async {
-
     setState(() {
       _isLoading = true;
     });
@@ -60,28 +61,33 @@ class HomeState extends State<Home> {
   void initState() {
     super.initState();
     _getCategories();
+
+    Api.getSliderItems().then((onValue) {
+      setState(() {
+        this.listSlider = onValue;
+      });
+    });
   }
 
   Widget topView(BuildContext context) {
     return Container(
-        height: 200.0,
-        child: PageView(
+      height: 200.0,
+      child: PageView.builder(
           controller: controller,
-          children: <Widget>[
-            topViewItems(context),
-            topViewItems(context),
-            topViewItems(context),
-          ],
-        ));
+          itemCount: this.listSlider.length,
+          itemBuilder: (context, index) {
+            return topViewItems(context, this.listSlider[index]);
+          }),
+    );
   }
 
-  Widget topViewItems(BuildContext context) {
+  Widget topViewItems(BuildContext context, SliderObj data) {
     return Stack(
       children: <Widget>[
         Container(
           decoration: BoxDecoration(
               image: DecorationImage(
-                  image: AssetImage("assets/sample1.jpg"), fit: BoxFit.cover)),
+                  image: NetworkImage(data.image), fit: BoxFit.cover)),
         ),
         Container(
           margin: EdgeInsets.only(left: 17.0),
@@ -89,20 +95,23 @@ class HomeState extends State<Home> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text("New Arrivals",
+              Text(data.title,
                   style: TextStyle(
                       fontSize: 24.0,
                       fontWeight: FontWeight.bold,
                       color: Colors.white)),
               Container(
+                width: 140.0,
                 margin: EdgeInsets.only(top: 10.0, bottom: 10.0),
-                child: Text("Check out out fresh new stuff \nfrom 63 Sales",
+                child: Text(data.description,
                     style: TextStyle(fontSize: 12.0, color: Colors.white)),
               ),
               InkWell(
                 onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => NewArrivals()));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => NewArrivals(data.id)));
                 },
                 child: Container(
                   width: 100.0,
@@ -141,16 +150,15 @@ class HomeState extends State<Home> {
               return storeItems(context, index);
             },
           ),
-
           Positioned(
-            child: _isLoading
-                ? Container(
-                    child: Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                    color: Colors.white.withOpacity(0.8),
-                  )
-                : Container()),
+              child: _isLoading
+                  ? Container(
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                      color: Colors.white.withOpacity(0.8),
+                    )
+                  : Container()),
         ],
       ),
     );
@@ -209,8 +217,8 @@ class HomeState extends State<Home> {
   Widget subItems(BuildContext context, ObjItems data) {
     return InkWell(
       onTap: () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => Detail(data.id)));
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => Detail(data.id, null)));
       },
       child: Container(
         margin: EdgeInsets.only(right: 20.0),
