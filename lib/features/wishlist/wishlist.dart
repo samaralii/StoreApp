@@ -96,7 +96,7 @@ class WishListState extends State<WishList> {
             alignment: Alignment(-1.0, 0),
             margin: EdgeInsets.only(left: 5.0),
             child: Text(
-              this.list[index].item.price.toString(),
+               r"$" + this.list[index].item.price.toString(),
               style:
                   TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
             ),

@@ -109,10 +109,10 @@ class DetailState extends State<Detail> {
                     Text(
                       data == null ? " " : data.item.title,
                       style: TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 16.0),
+                          fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      data == null ? " " : data.item.price.toString(),
+                      data == null ? " " : r"$" + data.item.price.toString(),
                       style: TextStyle(
                           fontSize: 13.0,
                           color: Colors.black,
@@ -304,7 +304,7 @@ class DetailState extends State<Detail> {
         width: 80.0,
         decoration: BoxDecoration(
             color:
-                attrList[index].isSelected == true ? Colors.blue : Colors.white,
+                attrList[index].isSelected == true ? Colors.yellow : Colors.white,
             borderRadius: BorderRadius.circular(4.0),
             border: Border.all(color: Colors.black, width: 1.0)),
         child: Center(

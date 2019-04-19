@@ -64,7 +64,7 @@ class Utilz {
     return list;
   }
 
-  static Future<List<DetailDataObj>> removeCart(int index) async {
+  static Future<List<DetailDataObj>> removeFromCartList(int index) async {
     final SharedPreferences pref = await SharedPreferences.getInstance();
 
     var stringJson = pref.get(CART_LIST);

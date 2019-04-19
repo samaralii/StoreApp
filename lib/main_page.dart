@@ -24,7 +24,7 @@ class MyAppState extends State<MyApp> {
 
   final List<Widget> _children = [
     Home(Colors.yellow),
-    Cart(Colors.yellow),
+    CartList(),
     WishList(),
     Account(Colors.blue),
   ];
@@ -103,11 +103,9 @@ class MyAppState extends State<MyApp> {
     List<Widget> columnContent = [];
 
     for (var i = 0; i < list.length; i++) {
-      columnContent.add(
-        ListTile(
-          title: Text(list[i].title), 
-        )
-      );
+      columnContent.add(ListTile(
+        title: Text(list[i].title),
+      ));
     }
 
     return columnContent;
@@ -159,8 +157,8 @@ class MyAppState extends State<MyApp> {
           BottomNavigationBarItem(icon: Icon(Icons.home), title: Text('Home')),
           BottomNavigationBarItem(
               icon: Icon(Icons.add_box), title: Text('Cart')),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.favorite), title: Text('Wishlist')),
+          // BottomNavigationBarItem(
+          //     icon: Icon(Icons.favorite), title: Text('Wishlist')),
           BottomNavigationBarItem(
               icon: Icon(Icons.account_box), title: Text('Account')),
         ],
