@@ -24,6 +24,13 @@ class DetailState extends State<Detail> {
   var _isLoading = false;
   var showButtons = false;
 
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
   final controller = PageController(initialPage: 0);
 
   DetailState(this.itemId, this.data);
@@ -108,8 +115,7 @@ class DetailState extends State<Detail> {
                   children: <Widget>[
                     Text(
                       data == null ? " " : data.item.title,
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold),
+                      style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                     Text(
                       data == null ? " " : r"$" + data.item.price.toString(),
@@ -303,8 +309,9 @@ class DetailState extends State<Detail> {
         height: 35.0,
         width: 80.0,
         decoration: BoxDecoration(
-            color:
-                attrList[index].isSelected == true ? Colors.yellow : Colors.white,
+            color: attrList[index].isSelected == true
+                ? Colors.yellow
+                : Colors.white,
             borderRadius: BorderRadius.circular(4.0),
             border: Border.all(color: Colors.black, width: 1.0)),
         child: Center(

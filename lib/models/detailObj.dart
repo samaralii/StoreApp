@@ -32,7 +32,7 @@ class DetailDataObj {
 }
 
 class DetailItemObj {
-  String uid;
+  int qty = 1;
   String title;
   String description;
   int price;
@@ -46,11 +46,13 @@ class DetailItemObj {
     "description" : description,
     "price" : price,
     "images" : images,
-    "attributes" : attributes
+    "attributes" : attributes,
+    "qty" : qty,
   };
 
   DetailItemObj.fromJson(Map<String, dynamic> parsedJson) {
     this.title = parsedJson['title'];
+    this.qty = parsedJson['qty'];
     this.description = parsedJson['description'];
     this.price = parsedJson['price'];
 

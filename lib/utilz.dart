@@ -134,4 +134,21 @@ class Utilz {
     }
     return list;
   }
+
+  static Future<List<DetailDataObj>> updateQty(int index, int value) async {
+    final pref = await SharedPreferences.getInstance();
+    var stringJson = pref.getString(CART_LIST);
+
+    if (stringJson != null) {
+      var list = decodeJson(stringJson);
+
+      list[index].item.qty = value;
+
+      String json = convert.jsonEncode(list);
+
+      pref.setString(CART_LIST, json);
+
+      return list;
+    }
+  }
 }

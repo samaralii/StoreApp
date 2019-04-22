@@ -58,6 +58,13 @@ class HomeState extends State<Home> {
   }
 
   @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
+  @override
   void initState() {
     super.initState();
     _getCategories();

@@ -106,18 +106,33 @@ class CartListState extends State<CartList> {
                                     Border.all(color: Colors.grey, width: 1.0)),
                             child: Center(
                               child: DropdownButton<String>(
-                                items: <String>['1', '2', '3', '4', '5']
-                                    .map((String value) {
+                                items: <String>[
+                                  '1',
+                                  '2',
+                                  '3',
+                                  '4',
+                                  '5',
+                                  '6',
+                                  '7',
+                                  '8',
+                                  '9'
+                                ].map((String value) {
                                   return new DropdownMenuItem<String>(
                                     value: value,
                                     child: new Text(value),
                                   );
                                 }).toList(),
-                                value: selectedVal,
-                                hint: Text("1"),
+                                value: this.list[index].item.qty == null
+                                    ? "1"
+                                    : this.list[index].item.qty.toString(),
+                                hint: Text('1'),
                                 onChanged: (value) {
-                                  selectedVal = value;
-                                  setState(() {});
+                                  // selectedVal = value;
+                                  Utilz.updateQty(index, int.parse(value))
+                                      .then((newList) {
+                                    this.list = newList;
+                                    setState(() {});
+                                  });
                                 },
                               ),
                             ),
@@ -126,7 +141,7 @@ class CartListState extends State<CartList> {
                             "   X   ",
                             style: TextStyle(fontSize: 16.0),
                           ),
-                          Text(this.list[index].item.price.toString() + r"$",
+                          Text(_getPrice(index),
                               style: TextStyle(fontSize: 15.0))
                         ],
                       )
@@ -154,11 +169,24 @@ class CartListState extends State<CartList> {
     );
   }
 
+  _getPrice(int index) {
+    var price = this.list[index].item.price;
+    var qty = this.list[index].item.qty == null ? 1 : this.list[index].item.qty;
+
+    var total = price * qty;
+
+    return total.toString() + r'$';
+  }
+
   int totalAmount() {
     int amount = 0;
 
     for (var i in this.list) {
-      amount += i.item.price;
+      var price = i.item.price;
+      var qty = i.item.qty == null ? 1 : i.item.qty;
+      var total = price * qty;
+
+      amount += total;
     }
 
     return amount;
