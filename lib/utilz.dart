@@ -9,6 +9,16 @@ class Utilz {
   static const WISHLIST = "wishlist";
 
   static Future<void> addToCart(DetailDataObj item) async {
+    // try {
+    //   for (var i in item.item.attributes[0].attr) {
+    //     print("${i.isSelected} ${i.name}");
+    //   }
+    // } catch (e) {
+    //   print(e.toString());
+    // }
+
+    // return;
+
     final SharedPreferences pref = await SharedPreferences.getInstance();
 
     var cartList = pref.getString(CART_LIST);
@@ -150,5 +160,21 @@ class Utilz {
 
       return list;
     }
+  }
+
+  static Future<String> getCartList() async {
+    final pref = await SharedPreferences.getInstance();
+    var stringJson = pref.getString(CART_LIST);
+
+    if (stringJson == null) {
+      return null;
+    } else {
+      return stringJson;
+    }
+  }
+
+  static Future<void> removeCardList() async {
+    final pref = await SharedPreferences.getInstance();
+    pref.remove(CART_LIST);
   }
 }

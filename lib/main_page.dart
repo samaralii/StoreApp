@@ -6,6 +6,7 @@ import 'package:a63sales/features/cart/cart.dart';
 import 'package:a63sales/features/account/account.dart';
 import 'package:a63sales/features/wishlist/wishlist.dart';
 import 'package:a63sales/models/categories.dart';
+import 'package:a63sales/features/auth/login.dart';
 
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
@@ -80,13 +81,6 @@ class MyAppState extends State<MyApp> {
 
         index -= 1;
 
-        // return InkWell(
-        //   onTap: () {},
-        //   child: ListTile(
-        //     title: Text("${this.categories[index].title}"),
-        //   ),
-        // );
-
         return ExpansionTile(
           title: Text("${this.categories[index].title}"),
           children: <Widget>[
@@ -134,20 +128,20 @@ class MyAppState extends State<MyApp> {
         elevation: 0.0,
         title: Text(_titles[_selectedIndex]),
         actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.notifications,
-              color: Colors.black,
-            ),
-            tooltip: 'Air it',
+          Builder(
+            builder: (context) => IconButton(
+                  onPressed: () {
+                    print("login");
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => Login()));
+                  },
+                  icon: Icon(
+                    Icons.account_circle,
+                    color: Colors.black,
+                  ),
+                  tooltip: 'Air it',
+                ),
           ),
-          IconButton(
-            icon: Icon(
-              Icons.search,
-              color: Colors.black,
-            ),
-            tooltip: 'Air it',
-          )
         ],
       ),
       backgroundColor: Colors.white,

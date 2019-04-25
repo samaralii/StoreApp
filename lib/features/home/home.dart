@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:a63sales/features/sub_items/subItems.dart';
 import 'package:a63sales/features/new_arrivals.dart';
 import 'package:a63sales/models/home.dart';
 import 'package:a63sales/features/detail/detail.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:a63sales/models/detailObj.dart';
 import 'package:a63sales/utilz.dart';
-import 'package:a63sales/features/detail/detail.dart';
+import 'package:a63sales/features/confirm_order/confirm_order.dart';
 
 class CartList extends StatefulWidget {
   @override
@@ -50,12 +50,27 @@ class CartListState extends State<CartList> {
                 onTap: () {
                   print("object");
                 },
-                child: Container(
-                  height: 35,
-                  width: 70.0,
-                  color: Colors.yellow,
-                  child: Center(
-                    child: Text("Checkout"),
+                child: InkWell(
+                  onTap: () {
+                    Utilz.getCartList().then((json) {
+                      print(json);
+                    });
+                  },
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ConfirmOrder()));
+                    },
+                    child: Container(
+                      height: 35,
+                      width: 70.0,
+                      color: Colors.yellow,
+                      child: Center(
+                        child: Text("Checkout"),
+                      ),
+                    ),
                   ),
                 ),
               )
@@ -64,6 +79,35 @@ class CartListState extends State<CartList> {
         ),
       ],
     );
+  }
+
+  void _showDialog(int index) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Confirmation"),
+            content: Text("Are you sure you want to delete this item?"),
+            actions: <Widget>[
+              FlatButton(
+                child: Text("Yes"),
+                onPressed: () {
+                  Utilz.removeFromCartList(index).then((list) {
+                    this.list = list;
+                    setState(() {});
+                  });
+                  Navigator.pop(context);
+                },
+              ),
+              FlatButton(
+                child: Text("No"),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              )
+            ],
+          );
+        });
   }
 
   _itemList() {
@@ -151,10 +195,7 @@ class CartListState extends State<CartList> {
                     alignment: Alignment.center,
                     child: IconButton(
                       onPressed: () {
-                        Utilz.removeFromCartList(index).then((list) {
-                          this.list = list;
-                          setState(() {});
-                        });
+                        _showDialog(index);
                       },
                       icon: Icon(Icons.delete),
                       color: Colors.red,
