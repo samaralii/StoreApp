@@ -7,18 +7,30 @@ class Utilz {
   static const APP_Name = "63Sales";
   static const CART_LIST = "cartList";
   static const WISHLIST = "wishlist";
+  static const USER_DATA = "user_data";
+
+  static Future<void> saveUserData() async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.setString(USER_DATA, "user_data");
+  }
+
+  static Future<String> getUserData() async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    var data = pref.getString(USER_DATA);
+
+    if (data == null) {
+      return null;
+    }
+
+    return data;
+  }
+
+  static Future<void> deleteUserData() async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.remove(USER_DATA);
+  }
 
   static Future<void> addToCart(DetailDataObj item) async {
-    // try {
-    //   for (var i in item.item.attributes[0].attr) {
-    //     print("${i.isSelected} ${i.name}");
-    //   }
-    // } catch (e) {
-    //   print(e.toString());
-    // }
-
-    // return;
-
     final SharedPreferences pref = await SharedPreferences.getInstance();
 
     var cartList = pref.getString(CART_LIST);

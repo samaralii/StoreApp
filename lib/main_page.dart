@@ -7,6 +7,7 @@ import 'package:a63sales/features/account/account.dart';
 import 'package:a63sales/features/wishlist/wishlist.dart';
 import 'package:a63sales/models/categories.dart';
 import 'package:a63sales/features/auth/login.dart';
+import 'package:a63sales/features/profile/profile.dart';
 
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
@@ -26,7 +27,6 @@ class MyAppState extends State<MyApp> {
   final List<Widget> _children = [
     Home(Colors.yellow),
     CartList(),
-    WishList(),
     Account(Colors.blue),
   ];
 
@@ -132,8 +132,16 @@ class MyAppState extends State<MyApp> {
             builder: (context) => IconButton(
                   onPressed: () {
                     print("login");
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Login()));
+
+                    Utilz.getUserData().then((onValue) {
+                      if (onValue != null) {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => Profile()));
+                      } else {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => Login()));
+                      }
+                    });
                   },
                   icon: Icon(
                     Icons.account_circle,

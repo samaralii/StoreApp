@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:a63sales/utilz.dart';
 
 class Account extends StatelessWidget {
   final Color color;
@@ -55,7 +56,8 @@ class Account extends StatelessWidget {
     return InkWell(
       onTap: () {},
       child: Container(
-        margin: EdgeInsets.only(top: 10.0, bottom: 10.0, left: 15.0, right: 15.0),
+        margin:
+            EdgeInsets.only(top: 10.0, bottom: 10.0, left: 15.0, right: 15.0),
         child: Column(
           children: <Widget>[
             Row(
@@ -82,6 +84,66 @@ class Account extends StatelessWidget {
     );
   }
 
+  _logoutBtn(String text, BuildContext context) {
+    return InkWell(
+      onTap: () {
+        _showDialog(context);
+      },
+      child: Container(
+        margin:
+            EdgeInsets.only(top: 10.0, bottom: 10.0, left: 15.0, right: 15.0),
+        child: Column(
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text(
+                  text,
+                  style: TextStyle(fontSize: 18.0, color: Colors.black),
+                ),
+                Icon(
+                  Icons.arrow_right,
+                  size: 30.0,
+                )
+              ],
+            ),
+            Container(
+              height: 0.5,
+              margin: EdgeInsets.only(top: 20.0, right: 5.0),
+              color: Colors.grey,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  _showDialog(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Action"),
+            content: Text("Are you sure you want logout?"),
+            actions: <Widget>[
+              FlatButton(
+                child: Text("Yes"),
+                onPressed: () {
+                  Utilz.deleteUserData();
+                  Navigator.pop(context);
+                },
+              ),
+              FlatButton(
+                child: Text("No"),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              )
+            ],
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -97,7 +159,7 @@ class Account extends StatelessWidget {
           _customButton("Shipping Information"),
           _customButton("Security"),
           _customButton("FAQ"),
-          _customButton("Logout"),
+          _logoutBtn("Logout", context),
         ],
       ),
     );

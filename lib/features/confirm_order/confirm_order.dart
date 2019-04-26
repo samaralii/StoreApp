@@ -113,10 +113,9 @@ class ConfirmOrderState extends State<ConfirmOrder> {
               FlatButton(
                 child: Text("Yes"),
                 onPressed: () {
-                  Utilz.removeCardList().then((list) {
-                  });
+                  Utilz.removeCardList().then((list) {});
                   Navigator.pop(context);
-                  Navigator.pop(context);
+                  Navigator.pop(context, true);
                 },
               ),
             ],

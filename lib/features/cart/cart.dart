@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:a63sales/models/detailObj.dart';
 import 'package:a63sales/utilz.dart';
 import 'package:a63sales/features/confirm_order/confirm_order.dart';
+import 'package:flutter/services.dart';
 
 class CartList extends StatefulWidget {
   @override
@@ -10,13 +11,20 @@ class CartList extends StatefulWidget {
   }
 }
 
-class CartListState extends State<CartList> {
+class CartListState extends State<CartList> with WidgetsBindingObserver {
   List<DetailDataObj> list = [];
   String selectedVal = "1";
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    print(state.index);
+  }
+
+  @override
   void initState() {
     super.initState();
+    // WidgetsBinding.instance.addObserver(this);
     Utilz.getCartItems().then((list) {
       if (list != null && list.isNotEmpty) {
         setState(() {
@@ -59,9 +67,16 @@ class CartListState extends State<CartList> {
                   child: InkWell(
                     onTap: () {
                       Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ConfirmOrder()));
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ConfirmOrder()))
+                          .then((onValue) {
+                        if (onValue) {
+                          setState(() {
+                            this.list = [];
+                          });
+                        }
+                      });
                     },
                     child: Container(
                       height: 35,
@@ -238,5 +253,28 @@ class CartListState extends State<CartList> {
     return Scaffold(
       body: _body(),
     );
+  }
+
+  handleAppLifecycleState() {
+    AppLifecycleState _lastLifecyleState;
+    SystemChannels.lifecycle.setMessageHandler((msg) {
+      print('SystemChannels> $msg');
+
+      switch (msg) {
+        case "AppLifecycleState.paused":
+          _lastLifecyleState = AppLifecycleState.paused;
+          break;
+        case "AppLifecycleState.inactive":
+          _lastLifecyleState = AppLifecycleState.inactive;
+          break;
+        case "AppLifecycleState.resumed":
+          _lastLifecyleState = AppLifecycleState.resumed;
+          break;
+        case "AppLifecycleState.suspending":
+          _lastLifecyleState = AppLifecycleState.suspending;
+          break;
+        default:
+      }
+    });
   }
 }

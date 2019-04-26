@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:a63sales/utilz.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -76,7 +77,10 @@ class LoginState extends State<Login> {
                 child: RaisedButton(
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30.0)),
-                  onPressed: () {},
+                  onPressed: () {
+                    Utilz.saveUserData();
+                    Navigator.pop(context);
+                  },
                   textColor: Colors.red,
                   color: Colors.yellow,
                   padding: EdgeInsets.all(8.0),
