@@ -175,30 +175,6 @@ class DetailState extends State<Detail> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
-                      // InkWell(
-                      //   onTap: () {
-                      //     Utilz.addToWishlist(this.data).then((_) {
-                      //       _showDialog("Successfully added to Wishlist");
-                      //     });
-                      //   },
-                      //   child: Container(
-                      //     height: 40.0,
-                      //     width: 150.0,
-                      //     decoration: BoxDecoration(
-                      //         borderRadius: BorderRadius.circular(2.0),
-                      //         border:
-                      //             Border.all(color: Colors.grey, width: 0.5),
-                      //         color: Colors.white),
-                      //     child: Center(
-                      //         child: Text(
-                      //       "Add To Wishlist",
-                      //       style: TextStyle(
-                      //           fontSize: 13.0,
-                      //           color: Colors.black,
-                      //           fontWeight: FontWeight.bold),
-                      //     )),
-                      //   ),
-                      // ),
                       InkWell(
                         onTap: () {
                           Utilz.addToCart(this.data).then((_) {

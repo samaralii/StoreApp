@@ -66,10 +66,16 @@ class CartListState extends State<CartList> with WidgetsBindingObserver {
                   },
                   child: InkWell(
                     onTap: () {
+                      if (this.list.isEmpty) {
+                        _showEmptyCartDialog();
+                        return;
+                      }
+
                       Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => ConfirmOrder()))
+                                  builder: (context) =>
+                                      ConfirmOrder(totalAmount().toString())))
                           .then((onValue) {
                         if (onValue) {
                           setState(() {
@@ -120,6 +126,24 @@ class CartListState extends State<CartList> with WidgetsBindingObserver {
                   Navigator.pop(context);
                 },
               )
+            ],
+          );
+        });
+  }
+
+  void _showEmptyCartDialog() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            content: Text("Cart Is Empty"),
+            actions: <Widget>[
+              FlatButton(
+                child: Text("Okay"),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
             ],
           );
         });

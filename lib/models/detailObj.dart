@@ -10,10 +10,7 @@ class DetailObj {
         data: DetailDataObj.fromJson(parsedJson['data']));
   }
 
-  Map<String, dynamic> toJson() => {
-    "status": status,
-    "data": data
-  };
+  Map<String, dynamic> toJson() => {"status": status, "data": data};
 }
 
 class DetailDataObj {
@@ -25,35 +22,35 @@ class DetailDataObj {
     return DetailDataObj(item: DetailItemObj.fromJson(parsedJson['Item']));
   }
 
-  Map<String, dynamic> toJson() => {
-    "Item" : item
-  };
-
+  Map<String, dynamic> toJson() => {"Item": item};
 }
 
 class DetailItemObj {
   int qty = 1;
   String title;
+  int id;
   String description;
   int price;
   List<DetailImageObj> images;
   List<DetailAttributeObj> attributes;
 
-  DetailItemObj({this.title, this.description, this.price});
+  DetailItemObj({this.title, this.description, this.price, this.id});
 
   Map<String, dynamic> toJson() => {
-    "title" : title,
-    "description" : description,
-    "price" : price,
-    "images" : images,
-    "attributes" : attributes,
-    "qty" : qty,
-  };
+        "title": title,
+        "description": description,
+        "price": price,
+        "images": images,
+        "attributes": attributes,
+        "qty": qty,
+        "id": id,
+      };
 
   DetailItemObj.fromJson(Map<String, dynamic> parsedJson) {
     this.title = parsedJson['title'];
     this.qty = parsedJson['qty'];
     this.description = parsedJson['description'];
+    this.id = parsedJson['id'];
     this.price = parsedJson['price'];
 
     this.images = [];
@@ -76,9 +73,7 @@ class DetailImageObj {
   String url;
   DetailImageObj({this.url});
 
-  Map<String, dynamic> toJson() => {
-    "url" : url
-  };
+  Map<String, dynamic> toJson() => {"url": url};
 
   factory DetailImageObj.fromJson(Map<String, dynamic> parsedJson) {
     return DetailImageObj(url: parsedJson['url']);
@@ -93,12 +88,7 @@ class DetailAttributeObj {
 
   DetailAttributeObj({this.name, this.value});
 
-
-  Map<String, dynamic> toJson() => {
-    "name" : name,
-    "value": value,
-    "attr" : attr
-  };
+  Map<String, dynamic> toJson() => {"name": name, "value": value, "attr": attr};
 
   DetailAttributeObj.fromJson(Map<String, dynamic> parsedJson) {
     name = parsedJson['name'];
@@ -116,10 +106,7 @@ class AttrObj {
   String name;
   bool isSelected;
 
-  Map<String, dynamic> toJson() => {
-    "name" : name,
-    "isSelected" : isSelected
-  };
+  Map<String, dynamic> toJson() => {"name": name, "isSelected": isSelected};
 
   AttrObj({this.name, this.isSelected});
 }

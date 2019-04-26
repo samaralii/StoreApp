@@ -1,7 +1,9 @@
 import 'package:a63sales/models/detailObj.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:a63sales/models/cartObj.dart';
+import 'package:a63sales/models/customer_detail.dart';
 import 'dart:convert' as convert;
+import 'package:uuid/uuid.dart';
 
 class Utilz {
   static const APP_Name = "63Sales";
@@ -41,6 +43,7 @@ class Utilz {
       String json = convert.jsonEncode(list);
 
       pref.setString(CART_LIST, json);
+      print(json);
     } else {
       var stringJson = pref.getString(CART_LIST);
       List<DetailDataObj> newList = [];
@@ -59,6 +62,7 @@ class Utilz {
     List<DetailDataObj> list = [];
 
     var stringJson = pref.getString(CART_LIST);
+    print(stringJson);
 
     if (stringJson != null) {
       list = decodeJson(stringJson);

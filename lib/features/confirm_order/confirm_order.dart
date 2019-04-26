@@ -1,17 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:a63sales/models/detailObj.dart';
 import 'package:a63sales/utilz.dart';
+import 'package:a63sales/models/customer_detail.dart';
+import 'package:a63sales/web_services.dart';
 
 class ConfirmOrder extends StatefulWidget {
+  String totalAmount;
+
+  ConfirmOrder(this.totalAmount);
+
   @override
   State<StatefulWidget> createState() {
-    return ConfirmOrderState();
+    return ConfirmOrderState(totalAmount);
   }
 }
 
 class ConfirmOrderState extends State<ConfirmOrder> {
   List<DetailDataObj> list = [];
-  int _radioValue1 = -1;
+  int _radioValue1 = 0;
+  var _isLoading = false;
+
+  String firstName = "";
+  String lastName = "";
+  String email = "";
+  String address = "";
+  String city = "";
+  String phoneNumber = "";
+  String paymentOption = "COD";
+  String totalAmount;
+
+  ConfirmOrderState(this.totalAmount);
 
   @override
   void initState() {
@@ -37,13 +55,13 @@ class ConfirmOrderState extends State<ConfirmOrder> {
 
       switch (_radioValue1) {
         case 0:
-          print("object");
+          this.paymentOption = "COD";
           break;
         case 1:
-          print("object");
+          this.paymentOption = "Paypal";
           break;
         case 2:
-          print("object");
+          this.paymentOption = "Credit Card";
           break;
       }
     });
@@ -77,8 +95,32 @@ class ConfirmOrderState extends State<ConfirmOrder> {
           alignment: Alignment.bottomCenter,
           child: InkWell(
             onTap: () {
-              _showDialog();
-              // Navigator.pop(context);
+              var customerDetail = CustomerDetail(
+                amount: this.totalAmount,
+                firstName: this.firstName,
+                lastName: this.lastName,
+                email: this.email,
+                address: this.address,
+                city: this.city,
+                phoneNumber: this.phoneNumber,
+              );
+
+              this._isLoading = true;
+              setState(() {});
+              Api.checkOut(list, customerDetail).then((onValue) {
+                this._isLoading = false;
+                setState(() {});
+
+                if (onValue == "success") {
+                  _showDialog();
+                } else {
+                  _showErrorDialog();
+                }
+              }).catchError((e) {
+                _showErrorDialog();
+                this._isLoading = false;
+                setState(() {});
+              });
             },
             child: Container(
               margin: EdgeInsets.all(5.0),
@@ -98,6 +140,15 @@ class ConfirmOrderState extends State<ConfirmOrder> {
             ),
           ),
         ),
+        Positioned(
+            child: _isLoading
+                ? Container(
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                    color: Colors.white.withOpacity(0.8),
+                  )
+                : Container()),
       ],
     );
   }
@@ -123,16 +174,98 @@ class ConfirmOrderState extends State<ConfirmOrder> {
         });
   }
 
+  void _showErrorDialog() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Error"),
+            content: Text("Sorry, something went wrong. Please try again."),
+            actions: <Widget>[
+              FlatButton(
+                child: Text("Okay"),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          );
+        });
+  }
+
   _topView() {
     return Column(
       children: <Widget>[
         Container(
           child: TextField(
             maxLines: 2,
+            onChanged: (value) {
+              this.address = value;
+            },
             decoration: InputDecoration(
                 focusedBorder: UnderlineInputBorder(
                     borderSide: BorderSide(color: Colors.red)),
                 labelText: 'Shipping Address',
+                labelStyle: TextStyle(color: Colors.red)),
+          ),
+        ),
+        Container(
+          child: TextField(
+            onChanged: (value) {
+              this.firstName = value;
+            },
+            decoration: InputDecoration(
+                focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.red)),
+                labelText: 'First Name',
+                labelStyle: TextStyle(color: Colors.red)),
+          ),
+        ),
+        Container(
+          child: TextField(
+            onChanged: (value) {
+              this.lastName = value;
+            },
+            decoration: InputDecoration(
+                focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.red)),
+                labelText: 'Last Name',
+                labelStyle: TextStyle(color: Colors.red)),
+          ),
+        ),
+        Container(
+          child: TextField(
+            onChanged: (value) {
+              this.email = value;
+            },
+            decoration: InputDecoration(
+                focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.red)),
+                labelText: 'Email',
+                labelStyle: TextStyle(color: Colors.red)),
+          ),
+        ),
+        Container(
+          child: TextField(
+            onChanged: (value) {
+              this.city = value;
+            },
+            decoration: InputDecoration(
+                focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.red)),
+                labelText: 'City',
+                labelStyle: TextStyle(color: Colors.red)),
+          ),
+        ),
+        Container(
+          child: TextField(
+            onChanged: (value) {
+              this.phoneNumber = value;
+            },
+            decoration: InputDecoration(
+                focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.red)),
+                labelText: 'Phone Number',
                 labelStyle: TextStyle(color: Colors.red)),
           ),
         ),

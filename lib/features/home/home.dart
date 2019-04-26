@@ -45,7 +45,8 @@ class HomeState extends State<Home> {
     if (response.statusCode == 200) {
       var jsonResponse = convert.jsonDecode(response.body);
       var status = ObjHome.fromJson(jsonResponse);
-      print("Home : ${status.status}");
+      print(jsonResponse);
+     
 
       setState(() {
         _isLoading = false;
