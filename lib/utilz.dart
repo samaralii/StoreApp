@@ -1,9 +1,6 @@
 import 'package:a63sales/models/detailObj.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:a63sales/models/cartObj.dart';
-import 'package:a63sales/models/customer_detail.dart';
 import 'dart:convert' as convert;
-import 'package:uuid/uuid.dart';
 
 class Utilz {
   static const APP_Name = "63Sales";

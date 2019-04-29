@@ -22,14 +22,6 @@ class HomeState extends State<Home> {
   final controller = PageController(initialPage: 0);
   var _isLoading = false;
 
-  final List<String> _titles = [
-    "What's new",
-    "Spring Summer 2019",
-    "Swagger",
-    "Winter"
-  ];
-  final List<String> _name = ["Men", "Women", "Girls", "Boys"];
-
   List<ObjPages> listpages = [];
   List<SliderObj> listSlider = [];
 

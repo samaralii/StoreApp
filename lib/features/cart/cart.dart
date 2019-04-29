@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:a63sales/models/detailObj.dart';
 import 'package:a63sales/utilz.dart';
 import 'package:a63sales/features/confirm_order/confirm_order.dart';
-import 'package:flutter/services.dart';
+import 'package:a63sales/features/auth/login.dart';
 
 class CartList extends StatefulWidget {
   @override
@@ -70,19 +70,7 @@ class CartListState extends State<CartList> with WidgetsBindingObserver {
                         _showEmptyCartDialog();
                         return;
                       }
-
-                      Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      ConfirmOrder(totalAmount().toString())))
-                          .then((onValue) {
-                        if (onValue) {
-                          setState(() {
-                            this.list = [];
-                          });
-                        }
-                      });
+                      _showAuthDialog();
                     },
                     child: Container(
                       height: 35,
@@ -124,6 +112,45 @@ class CartListState extends State<CartList> with WidgetsBindingObserver {
                 child: Text("No"),
                 onPressed: () {
                   Navigator.pop(context);
+                },
+              )
+            ],
+          );
+        });
+  }
+
+  void _showAuthDialog() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Confirmation"),
+            content: Text(""),
+            actions: <Widget>[
+              FlatButton(
+                child: Text("Continue as a guest"),
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  ConfirmOrder(totalAmount().toString())))
+                      .then((onValue) {
+                    if (onValue) {
+                      setState(() {
+                        this.list = [];
+                      });
+                    }
+                  });
+                },
+              ),
+              FlatButton(
+                child: Text("Login"),
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => Login()));
                 },
               )
             ],
@@ -279,26 +306,5 @@ class CartListState extends State<CartList> with WidgetsBindingObserver {
     );
   }
 
-  handleAppLifecycleState() {
-    AppLifecycleState _lastLifecyleState;
-    SystemChannels.lifecycle.setMessageHandler((msg) {
-      print('SystemChannels> $msg');
-
-      switch (msg) {
-        case "AppLifecycleState.paused":
-          _lastLifecyleState = AppLifecycleState.paused;
-          break;
-        case "AppLifecycleState.inactive":
-          _lastLifecyleState = AppLifecycleState.inactive;
-          break;
-        case "AppLifecycleState.resumed":
-          _lastLifecyleState = AppLifecycleState.resumed;
-          break;
-        case "AppLifecycleState.suspending":
-          _lastLifecyleState = AppLifecycleState.suspending;
-          break;
-        default:
-      }
-    });
-  }
+  
 }

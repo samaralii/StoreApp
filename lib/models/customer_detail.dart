@@ -15,16 +15,18 @@ class CustomerDetail {
       this.email,
       this.address,
       this.city,
-      this.phoneNumber});
+      this.phoneNumber,
+      this.paymentMethod});
 
 
        Map<String, dynamic> toJson() => {
         "amount": amount,
-        "firstName": firstName,
-        "lastName": lastName,
+        "firstname": firstName,
+        "lastname": lastName,
         "email": email,
         "address": address,
         "city": city,
-        "phoneNumber": phoneNumber,
+        "phone": phoneNumber,
+        "payment_method": paymentMethod,
       };
 }

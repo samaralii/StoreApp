@@ -5,7 +5,7 @@ import 'package:a63sales/models/customer_detail.dart';
 import 'package:a63sales/web_services.dart';
 
 class ConfirmOrder extends StatefulWidget {
-  String totalAmount;
+  final String totalAmount;
 
   ConfirmOrder(this.totalAmount);
 
@@ -45,7 +45,6 @@ class ConfirmOrderState extends State<ConfirmOrder> {
 
   @override
   void reassemble() {
-    // TODO: implement reassemble
     super.reassemble();
   }
 
@@ -95,32 +94,47 @@ class ConfirmOrderState extends State<ConfirmOrder> {
           alignment: Alignment.bottomCenter,
           child: InkWell(
             onTap: () {
-              var customerDetail = CustomerDetail(
-                amount: this.totalAmount,
-                firstName: this.firstName,
-                lastName: this.lastName,
-                email: this.email,
-                address: this.address,
-                city: this.city,
-                phoneNumber: this.phoneNumber,
-              );
+              // if (this.firstName.isEmpty ||
+              //     this.lastName.isEmpty ||
+              //     this.email.isEmpty ||
+              //     this.address.isEmpty ||
+              //     this.phoneNumber.isEmpty) {
+              //   _showValidationMsg();
+
+              //   return;
+              // }
 
               this._isLoading = true;
               setState(() {});
-              Api.checkOut(list, customerDetail).then((onValue) {
-                this._isLoading = false;
-                setState(() {});
 
-                if (onValue == "success") {
-                  _showDialog();
-                } else {
+              Api.getToken().then((token) {
+                var customerDetail = CustomerDetail(
+                  amount: this.totalAmount,
+                  firstName: this.firstName,
+                  lastName: this.lastName,
+                  email: this.email,
+                  address: this.address,
+                  city: this.city,
+                  phoneNumber: this.phoneNumber,
+                  paymentMethod: this.paymentOption,
+                );
+
+                Api.checkOut(list, customerDetail, token).then((onValue) {
+                  this._isLoading = false;
+                  setState(() {});
+                  if (onValue == "success") {
+                    _showDialog();
+                  } else {
+                    _showErrorDialog();
+                  }
+                }).catchError((e) {
                   _showErrorDialog();
-                }
-              }).catchError((e) {
-                _showErrorDialog();
-                this._isLoading = false;
-                setState(() {});
+                  this._isLoading = false;
+                  setState(() {});
+                });
               });
+
+              return;
             },
             child: Container(
               margin: EdgeInsets.all(5.0),
@@ -181,6 +195,25 @@ class ConfirmOrderState extends State<ConfirmOrder> {
           return AlertDialog(
             title: Text("Error"),
             content: Text("Sorry, something went wrong. Please try again."),
+            actions: <Widget>[
+              FlatButton(
+                child: Text("Okay"),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          );
+        });
+  }
+
+  void _showValidationMsg() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Error"),
+            content: Text("Please fill all the required fields"),
             actions: <Widget>[
               FlatButton(
                 child: Text("Okay"),

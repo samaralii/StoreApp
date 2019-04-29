@@ -7,8 +7,8 @@ import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
 
 class Detail extends StatefulWidget {
-  int itemId;
-  DetailDataObj data;
+  final int itemId;
+  final DetailDataObj data;
 
   Detail(this.itemId, this.data);
 

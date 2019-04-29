@@ -4,7 +4,7 @@ import 'package:a63sales/web_services.dart';
 import 'package:a63sales/features/detail/detail.dart';
 
 class NewArrivals extends StatefulWidget {
-  int id;
+  final int id;
 
   NewArrivals(this.id);
 
@@ -127,6 +127,7 @@ class NewArrivalsState extends State<NewArrivals> {
           child: Row(
         children: <Widget>[
           IconButton(
+            onPressed: () {},
             icon: Icon(
               Icons.filter_list,
               color: Colors.black,
@@ -148,6 +149,7 @@ class NewArrivalsState extends State<NewArrivals> {
           child: Row(
         children: <Widget>[
           IconButton(
+            onPressed: () {},
             icon: Icon(
               Icons.sort,
               color: Colors.black,
@@ -171,6 +173,7 @@ class NewArrivalsState extends State<NewArrivals> {
         elevation: 1.0,
         actions: <Widget>[
           IconButton(
+            onPressed: () {},
             icon: Icon(
               Icons.search,
               color: Colors.black,

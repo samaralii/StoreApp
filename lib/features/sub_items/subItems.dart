@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:a63sales/features/detail/detail.dart';
 
 
 class SubItems extends StatefulWidget {
@@ -305,6 +304,7 @@ class SubItemsState extends State<SubItems> {
         elevation: 0.0,
         actions: <Widget>[
           IconButton(
+            onPressed: () {},
             icon: Icon(
               Icons.search,
               color: Colors.black,

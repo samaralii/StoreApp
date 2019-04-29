@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:a63sales/features/home/home.dart';
 import 'package:a63sales/features/cart/cart.dart';
 import 'package:a63sales/features/account/account.dart';
-import 'package:a63sales/features/wishlist/wishlist.dart';
 import 'package:a63sales/models/categories.dart';
 import 'package:a63sales/features/auth/login.dart';
 import 'package:a63sales/features/profile/profile.dart';
