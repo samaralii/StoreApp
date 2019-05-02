@@ -29,6 +29,8 @@ class ConfirmOrderState extends State<ConfirmOrder> {
   String paymentOption = "COD";
   String totalAmount;
 
+  final _formKey = GlobalKey<FormState>();
+
   ConfirmOrderState(this.totalAmount);
 
   @override
@@ -94,15 +96,7 @@ class ConfirmOrderState extends State<ConfirmOrder> {
           alignment: Alignment.bottomCenter,
           child: InkWell(
             onTap: () {
-              // if (this.firstName.isEmpty ||
-              //     this.lastName.isEmpty ||
-              //     this.email.isEmpty ||
-              //     this.address.isEmpty ||
-              //     this.phoneNumber.isEmpty) {
-              //   _showValidationMsg();
-
-              //   return;
-              // }
+              if (!_formKey.currentState.validate()) return;
 
               this._isLoading = true;
               setState(() {});
@@ -207,150 +201,152 @@ class ConfirmOrderState extends State<ConfirmOrder> {
         });
   }
 
-  void _showValidationMsg() {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text("Error"),
-            content: Text("Please fill all the required fields"),
-            actions: <Widget>[
-              FlatButton(
-                child: Text("Okay"),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-            ],
-          );
-        });
-  }
-
   _topView() {
-    return Column(
-      children: <Widget>[
-        Container(
-          child: TextField(
-            maxLines: 2,
-            onChanged: (value) {
-              this.address = value;
-            },
-            decoration: InputDecoration(
-                focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.red)),
-                labelText: 'Shipping Address',
-                labelStyle: TextStyle(color: Colors.red)),
+    return Form(
+      key: _formKey,
+      child: Column(
+        children: <Widget>[
+          Container(
+            child: TextFormField(
+              maxLines: 2,
+              validator: (value) {
+                if (value.isEmpty) return 'Required Field';
+              },
+              onSaved: (value) {
+                this.address = value;
+              },
+              decoration: InputDecoration(
+                  focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.red)),
+                  labelText: 'Shipping Address',
+                  labelStyle: TextStyle(color: Colors.red)),
+            ),
           ),
-        ),
-        Container(
-          child: TextField(
-            onChanged: (value) {
-              this.firstName = value;
-            },
-            decoration: InputDecoration(
-                focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.red)),
-                labelText: 'First Name',
-                labelStyle: TextStyle(color: Colors.red)),
+          Container(
+            child: TextFormField(
+              validator: (value) {
+                if (value.isEmpty) return 'Required Field';
+              },
+              onSaved: (value) {
+                this.firstName = value;
+              },
+              decoration: InputDecoration(
+                  focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.red)),
+                  labelText: 'First Name',
+                  labelStyle: TextStyle(color: Colors.red)),
+            ),
           ),
-        ),
-        Container(
-          child: TextField(
-            onChanged: (value) {
-              this.lastName = value;
-            },
-            decoration: InputDecoration(
-                focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.red)),
-                labelText: 'Last Name',
-                labelStyle: TextStyle(color: Colors.red)),
+          Container(
+            child: TextFormField(
+              validator: (value) {
+                if (value.isEmpty) return 'Required Field';
+              },
+              onSaved: (value) {
+                this.lastName = value;
+              },
+              decoration: InputDecoration(
+                  focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.red)),
+                  labelText: 'Last Name',
+                  labelStyle: TextStyle(color: Colors.red)),
+            ),
           ),
-        ),
-        Container(
-          child: TextField(
-            onChanged: (value) {
-              this.email = value;
-            },
-            decoration: InputDecoration(
-                focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.red)),
-                labelText: 'Email',
-                labelStyle: TextStyle(color: Colors.red)),
+          Container(
+            child: TextFormField(
+              validator: (value) {
+                if (value.isEmpty) return 'Required Field';
+              },
+              onSaved: (value) {
+                this.email = value;
+              },
+              decoration: InputDecoration(
+                  focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.red)),
+                  labelText: 'Email',
+                  labelStyle: TextStyle(color: Colors.red)),
+            ),
           ),
-        ),
-        Container(
-          child: TextField(
-            onChanged: (value) {
-              this.city = value;
-            },
-            decoration: InputDecoration(
-                focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.red)),
-                labelText: 'City',
-                labelStyle: TextStyle(color: Colors.red)),
+          Container(
+            child: TextFormField(
+              validator: (value) {
+                if (value.isEmpty) return 'Required Field';
+              },
+              onSaved: (value) {
+                this.city = value;
+              },
+              decoration: InputDecoration(
+                  focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.red)),
+                  labelText: 'City',
+                  labelStyle: TextStyle(color: Colors.red)),
+            ),
           ),
-        ),
-        Container(
-          child: TextField(
-            onChanged: (value) {
-              this.phoneNumber = value;
-            },
-            decoration: InputDecoration(
-                focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.red)),
-                labelText: 'Phone Number',
-                labelStyle: TextStyle(color: Colors.red)),
+          Container(
+            child: TextFormField(
+              validator: (value) {
+                if (value.isEmpty) return 'Required Field';
+              },
+              onSaved: (value) {
+                this.phoneNumber = value;
+              },
+              decoration: InputDecoration(
+                  focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.red)),
+                  labelText: 'Phone Number',
+                  labelStyle: TextStyle(color: Colors.red)),
+            ),
           ),
-        ),
-        Align(
-          alignment: Alignment.topLeft,
-          child: Container(
-              margin: EdgeInsets.only(top: 8.0, bottom: 8.0),
-              child: Text(
-                "Select Payment Option",
-                style: TextStyle(color: Colors.red),
-              )),
-        ),
-        Align(
-          alignment: Alignment.topLeft,
-          child: Row(
-            children: <Widget>[
-              Radio(
-                value: 0,
-                groupValue: _radioValue1,
-                onChanged: _handleRadioValueChange1,
-              ),
-              Text("Cash On Delivery")
-            ],
+          Align(
+            alignment: Alignment.topLeft,
+            child: Container(
+                margin: EdgeInsets.only(top: 8.0, bottom: 8.0),
+                child: Text(
+                  "Select Payment Option",
+                  style: TextStyle(color: Colors.red),
+                )),
           ),
-        ),
-        Align(
-          alignment: Alignment.topLeft,
-          child: Row(
-            children: <Widget>[
-              Radio(
-                value: 1,
-                groupValue: _radioValue1,
-                onChanged: _handleRadioValueChange1,
-              ),
-              Text("Paypal")
-            ],
+          Align(
+            alignment: Alignment.topLeft,
+            child: Row(
+              children: <Widget>[
+                Radio(
+                  value: 0,
+                  groupValue: _radioValue1,
+                  onChanged: _handleRadioValueChange1,
+                ),
+                Text("Cash On Delivery")
+              ],
+            ),
           ),
-        ),
-        Align(
-          alignment: Alignment.topLeft,
-          child: Row(
-            children: <Widget>[
-              Radio(
-                value: 2,
-                groupValue: _radioValue1,
-                onChanged: _handleRadioValueChange1,
-              ),
-              Text("Credit Card")
-            ],
+          Align(
+            alignment: Alignment.topLeft,
+            child: Row(
+              children: <Widget>[
+                Radio(
+                  value: 1,
+                  groupValue: _radioValue1,
+                  onChanged: _handleRadioValueChange1,
+                ),
+                Text("Paypal")
+              ],
+            ),
           ),
-        ),
-      ],
+          Align(
+            alignment: Alignment.topLeft,
+            child: Row(
+              children: <Widget>[
+                Radio(
+                  value: 2,
+                  groupValue: _radioValue1,
+                  onChanged: _handleRadioValueChange1,
+                ),
+                Text("Credit Card")
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 

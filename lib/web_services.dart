@@ -43,7 +43,7 @@ class Api {
 
     if (response.statusCode == 200) {
       var jsonResponse = response.body;
-      
+
       var token = jsonResponse;
       print("Token : $token");
       return token;
@@ -52,8 +52,8 @@ class Api {
     return null;
   }
 
-  static Future<String> checkOut(
-      List<DetailDataObj> cartList, CustomerDetail cutomerDetail, String token) async {
+  static Future<String> checkOut(List<DetailDataObj> cartList,
+      CustomerDetail cutomerDetail, String token) async {
     var uuid = Uuid();
 
     Map userHeader = {"X-CSRF-Token": token};
@@ -67,12 +67,14 @@ class Api {
     print(customerDetailJson);
     print(uid);
 
-    var response = await http.post(url, body: {
-      'listJson': cartListJson,
-      'customer_detail': customerDetailJson,
-      'session_id': uid,
-      'security_check': "63sales"
-    }, headers: userHeader);
+    var response = await http.post(url,
+        body: {
+          'listJson': cartListJson,
+          'customer_detail': customerDetailJson,
+          'session_id': uid,
+          'security_check': "63sales"
+        },
+        headers: userHeader);
 
     if (response.statusCode == 200) {
       var jsonResponse = convert.jsonDecode(response.body);
