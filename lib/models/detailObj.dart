@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 class DetailObj {
   String status;
   DetailDataObj data;
@@ -48,7 +50,7 @@ class DetailItemObj {
 
   DetailItemObj.fromJson(Map<String, dynamic> parsedJson) {
     this.title = parsedJson['title'];
-    this.qty = parsedJson['qty'];
+    this.qty = 1;
     this.description = parsedJson['description'];
     this.id = parsedJson['id'];
     this.price = parsedJson['price'];
@@ -94,10 +96,17 @@ class DetailAttributeObj {
     name = parsedJson['name'];
     value = parsedJson['value'];
     attr = [];
-    var list = value.split(',');
 
-    for (var item in list) {
-      attr.add(AttrObj(name: item, isSelected: false));
+    if (parsedJson['attr'] == null) {
+      var list = value.split(',');
+
+      for (var item in list) {
+        attr.add(AttrObj(name: item, isSelected: false));
+      }
+    } else {
+      for (var item in parsedJson['attr']) {
+        attr.add(AttrObj.fromJson(item));
+      }
     }
   }
 }
@@ -109,4 +118,11 @@ class AttrObj {
   Map<String, dynamic> toJson() => {"name": name, "isSelected": isSelected};
 
   AttrObj({this.name, this.isSelected});
+
+  factory AttrObj.fromJson(Map<String, dynamic> parsedJson) {
+    return AttrObj(
+      name: parsedJson['name'],
+      isSelected: parsedJson['isSelected'],
+    );
+  }
 }

@@ -20,12 +20,12 @@ class ConfirmOrderState extends State<ConfirmOrder> {
   int _radioValue1 = 0;
   var _isLoading = false;
 
-  String firstName = "";
-  String lastName = "";
-  String email = "";
-  String address = "";
-  String city = "";
-  String phoneNumber = "";
+  final firstName = TextEditingController();
+  final lastName = TextEditingController();
+  final email = TextEditingController();
+  final address = TextEditingController();
+  final city = TextEditingController();
+  final phoneNumber = TextEditingController();
   String paymentOption = "COD";
   String totalAmount;
 
@@ -101,19 +101,19 @@ class ConfirmOrderState extends State<ConfirmOrder> {
               this._isLoading = true;
               setState(() {});
 
-              Api.getToken().then((token) {
-                var customerDetail = CustomerDetail(
-                  amount: this.totalAmount,
-                  firstName: this.firstName,
-                  lastName: this.lastName,
-                  email: this.email,
-                  address: this.address,
-                  city: this.city,
-                  phoneNumber: this.phoneNumber,
-                  paymentMethod: this.paymentOption,
-                );
+              var customerDetail = CustomerDetail(
+                amount: this.totalAmount,
+                firstName: this.firstName.text,
+                lastName: this.lastName.text,
+                email: this.email.text,
+                address: this.address.text,
+                city: this.city.text,
+                phoneNumber: this.phoneNumber.text,
+                paymentMethod: this.paymentOption,
+              );
 
-                Api.checkOut(list, customerDetail, token).then((onValue) {
+              Utilz.getCartJson().then((listJson) {
+                Api.checkOut(listJson, customerDetail).then((onValue) {
                   this._isLoading = false;
                   setState(() {});
                   if (onValue == "success") {
@@ -212,9 +212,7 @@ class ConfirmOrderState extends State<ConfirmOrder> {
               validator: (value) {
                 if (value.isEmpty) return 'Required Field';
               },
-              onSaved: (value) {
-                this.address = value;
-              },
+              controller: address,
               decoration: InputDecoration(
                   focusedBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: Colors.red)),
@@ -227,9 +225,7 @@ class ConfirmOrderState extends State<ConfirmOrder> {
               validator: (value) {
                 if (value.isEmpty) return 'Required Field';
               },
-              onSaved: (value) {
-                this.firstName = value;
-              },
+              controller: firstName,
               decoration: InputDecoration(
                   focusedBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: Colors.red)),
@@ -242,9 +238,7 @@ class ConfirmOrderState extends State<ConfirmOrder> {
               validator: (value) {
                 if (value.isEmpty) return 'Required Field';
               },
-              onSaved: (value) {
-                this.lastName = value;
-              },
+              controller: lastName,
               decoration: InputDecoration(
                   focusedBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: Colors.red)),
@@ -257,9 +251,7 @@ class ConfirmOrderState extends State<ConfirmOrder> {
               validator: (value) {
                 if (value.isEmpty) return 'Required Field';
               },
-              onSaved: (value) {
-                this.email = value;
-              },
+              controller: email,
               decoration: InputDecoration(
                   focusedBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: Colors.red)),
@@ -272,9 +264,7 @@ class ConfirmOrderState extends State<ConfirmOrder> {
               validator: (value) {
                 if (value.isEmpty) return 'Required Field';
               },
-              onSaved: (value) {
-                this.city = value;
-              },
+              controller: city,
               decoration: InputDecoration(
                   focusedBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: Colors.red)),
@@ -287,9 +277,7 @@ class ConfirmOrderState extends State<ConfirmOrder> {
               validator: (value) {
                 if (value.isEmpty) return 'Required Field';
               },
-              onSaved: (value) {
-                this.phoneNumber = value;
-              },
+              controller: phoneNumber,
               decoration: InputDecoration(
                   focusedBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: Colors.red)),

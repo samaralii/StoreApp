@@ -24,6 +24,17 @@ class Utilz {
     return data;
   }
 
+  static Future<String> getCartJson() async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    var data = pref.getString(CART_LIST);
+
+    if (data == null) {
+      return null;
+    }
+
+    return data;
+  }
+
   static Future<void> deleteUserData() async {
     final SharedPreferences pref = await SharedPreferences.getInstance();
     pref.remove(USER_DATA);
@@ -40,6 +51,8 @@ class Utilz {
       String json = convert.jsonEncode(list);
 
       pref.setString(CART_LIST, json);
+
+      print(pref.getString(CART_LIST));
       print(json);
     } else {
       var stringJson = pref.getString(CART_LIST);
@@ -50,6 +63,8 @@ class Utilz {
       newList.add(item);
       String json = convert.jsonEncode(newList);
       pref.setString(CART_LIST, json);
+
+      print(json);
     }
   }
 

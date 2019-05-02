@@ -37,48 +37,30 @@ class Api {
     return null;
   }
 
-  static Future<String> getToken() async {
-    var url = "${BASEURL}getcsrf";
+  static Future<String> checkOut(
+      String listJson, CustomerDetail cutomerDetail) async {
+    var uuid = Uuid();
+
+    String customerDetailJson = convert.jsonEncode(cutomerDetail);
+    String uid = uuid.v1();
+
+    // print(listJson);
+    // print(customerDetailJson);
+    // print(uid);
+
+    var url =
+        "${BASEURL}checkout?listJson=$listJson&security_check=63sales&customer_detail=$customerDetailJson&session_id=$uid";
+
     var response = await http.get(url);
 
     if (response.statusCode == 200) {
-      var jsonResponse = response.body;
-
-      var token = jsonResponse;
-      print("Token : $token");
-      return token;
-    }
-
-    return null;
-  }
-
-  static Future<String> checkOut(List<DetailDataObj> cartList,
-      CustomerDetail cutomerDetail, String token) async {
-    var uuid = Uuid();
-
-    Map userHeader = {"X-CSRF-Token": token};
-
-    String cartListJson = convert.jsonEncode(cartList);
-    String customerDetailJson = convert.jsonEncode(cutomerDetail);
-    String uid = uuid.v1();
-    var url = "${BASEURL}checkout";
-
-    print(cartListJson);
-    print(customerDetailJson);
-    print(uid);
-
-    var response = await http.post(url,
-        body: {
-          'listJson': cartListJson,
-          'customer_detail': customerDetailJson,
-          'session_id': uid,
-          'security_check': "63sales"
-        },
-        headers: userHeader);
-
-    if (response.statusCode == 200) {
-      var jsonResponse = convert.jsonDecode(response.body);
-      return "success";
+      try {
+        var jsonResponse = convert.jsonDecode(response.body);
+        return "success";
+      } catch (e) {
+        print(e.toString());
+        return null;
+      }
     } else {
       return null;
     }
