@@ -4,7 +4,7 @@ import 'package:a63sales/models/sliderObj.dart';
 import 'package:a63sales/models/cat_obj.dart';
 import 'package:a63sales/models/customer_detail.dart';
 import 'package:uuid/uuid.dart';
-import 'package:a63sales/models/detailObj.dart';
+import 'package:a63sales/models/authObj.dart';
 
 class Api {
   static const String BASEURL = "http://hrspidersystem.com/63sales/api/";
@@ -32,6 +32,53 @@ class Api {
       var status = CatStatus.fromJson(jsonResponse);
       print(status.status);
       return status.data.item;
+    }
+
+    return null;
+  }
+
+  static Future<AuthObj> login(String email, String password) async {
+    var url = "${BASEURL}login";
+
+    Map<String, String> body = {
+      'email': email,
+      'password': password,
+    };
+
+    var response = await http.post(url, body: body);
+
+    if (response.statusCode == 200) {
+      var jsonResponse = convert.jsonDecode(response.body);
+      var authObj = AuthObj.fromJson(jsonResponse);
+      print(authObj.status);
+      return authObj;
+    }
+
+    return null;
+  }
+
+  static Future<String> registration(String fName, String lName,
+      String address, String email, String username, String password) async {
+    var url = "${BASEURL}register";
+
+    Map<String, String> body = {
+      'firstname': fName,
+      'lastname': lName,
+      'username': username,
+      'email': email,
+      'password': password,
+      'address': address,
+    };
+
+    print(body);
+
+    var response = await http.post(url, body: body);
+
+    if (response.statusCode == 200) {
+      var jsonResponse = convert.jsonDecode(response.body);
+      var status = jsonResponse['status'];
+      print(status);
+      return status;
     }
 
     return null;

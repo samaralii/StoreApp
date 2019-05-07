@@ -1,4 +1,4 @@
-import 'package:a63sales/features/auth/login.dart';
+import 'package:a63sales/web_services.dart';
 import 'package:flutter/material.dart';
 
 class Registration extends StatefulWidget {
@@ -9,14 +9,16 @@ class Registration extends StatefulWidget {
 }
 
 class RegistrationState extends State<Registration> {
-  String firstName;
-  String lastName;
-  String phone;
-  String address;
-  String email;
-  String password;
+  final firstName = TextEditingController();
+  final lastName = TextEditingController();
+  final email = TextEditingController();
+  final address = TextEditingController();
+  final password = TextEditingController();
+  final username = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
+
+  var _isLoading = false;
 
   _body() {
     return SingleChildScrollView(
@@ -29,13 +31,11 @@ class RegistrationState extends State<Registration> {
                   Container(
                     margin: EdgeInsets.all(10.0),
                     child: TextFormField(
+                      controller: firstName,
                       validator: (value) {
                         if (value.isEmpty) {
                           return 'Required field';
                         }
-                      },
-                      onSaved: (value) {
-                        this.firstName = value;
                       },
                       decoration: InputDecoration(
                           focusedBorder: UnderlineInputBorder(
@@ -47,13 +47,11 @@ class RegistrationState extends State<Registration> {
                   Container(
                     margin: EdgeInsets.all(10.0),
                     child: TextFormField(
+                      controller: lastName,
                       validator: (value) {
                         if (value.isEmpty) {
                           return 'Required field';
                         }
-                      },
-                      onSaved: (value) {
-                        this.lastName = value;
                       },
                       decoration: InputDecoration(
                           focusedBorder: UnderlineInputBorder(
@@ -65,31 +63,27 @@ class RegistrationState extends State<Registration> {
                   Container(
                     margin: EdgeInsets.all(10.0),
                     child: TextFormField(
+                      controller: username,
                       validator: (value) {
                         if (value.isEmpty) {
                           return 'Required field';
                         }
                       },
-                      onSaved: (value) {
-                        this.phone = value;
-                      },
                       decoration: InputDecoration(
                           focusedBorder: UnderlineInputBorder(
                               borderSide: BorderSide(color: Colors.red)),
-                          labelText: 'Phone Number',
+                          labelText: 'Username',
                           labelStyle: TextStyle(color: Colors.red)),
                     ),
                   ),
                   Container(
                     margin: EdgeInsets.all(10.0),
                     child: TextFormField(
+                      controller: address,
                       validator: (value) {
                         if (value.isEmpty) {
                           return 'Required field';
                         }
-                      },
-                      onSaved: (value) {
-                        this.address = value;
                       },
                       decoration: InputDecoration(
                           focusedBorder: UnderlineInputBorder(
@@ -101,13 +95,11 @@ class RegistrationState extends State<Registration> {
                   Container(
                     margin: EdgeInsets.all(10.0),
                     child: TextFormField(
+                      controller: email,
                       validator: (value) {
                         if (value.isEmpty) {
                           return 'Required field';
                         }
-                      },
-                      onSaved: (value) {
-                        this.email = value;
                       },
                       decoration: InputDecoration(
                           focusedBorder: UnderlineInputBorder(
@@ -119,13 +111,11 @@ class RegistrationState extends State<Registration> {
                   Container(
                     margin: EdgeInsets.all(10.0),
                     child: TextFormField(
+                      controller: password,
                       validator: (value) {
                         if (value.isEmpty) {
                           return 'Required field';
                         }
-                      },
-                      onSaved: (value) {
-                        this.password = value;
                       },
                       obscureText: true,
                       decoration: InputDecoration(
@@ -144,10 +134,22 @@ class RegistrationState extends State<Registration> {
                             borderRadius: BorderRadius.circular(30.0)),
                         onPressed: () {
                           if (_formKey.currentState.validate()) {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => Login()));
+                            setState(() {
+                              _isLoading = true;
+                            });
+                            Api.registration(
+                                    firstName.text,
+                                    lastName.text,
+                                    address.text,
+                                    email.text,
+                                    username.text,
+                                    password.text)
+                                .then((status) {
+                              setState(() {
+                                _isLoading = false;
+                              });
+                              _showSuccessMsg();
+                            });
                           }
                         },
                         textColor: Colors.red,
@@ -162,17 +164,19 @@ class RegistrationState extends State<Registration> {
             )));
   }
 
-  void _showValidationMsg() {
+  void _showSuccessMsg() {
     showDialog(
+        barrierDismissible: false,
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text("Error"),
-            content: Text("Please fill all the required fields"),
+            title: Text("Successfull"),
+            content: Text(""),
             actions: <Widget>[
               FlatButton(
                 child: Text("Okay"),
                 onPressed: () {
+                  Navigator.pop(context);
                   Navigator.pop(context);
                 },
               ),
@@ -187,6 +191,19 @@ class RegistrationState extends State<Registration> {
         appBar: AppBar(
           title: Text("Registration"),
         ),
-        body: _body());
+        body: Stack(
+          children: <Widget>[
+            _body(),
+            Positioned(
+                child: _isLoading
+                    ? Container(
+                        child: Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                        color: Colors.white.withOpacity(0.8),
+                      )
+                    : Container()),
+          ],
+        ));
   }
 }

@@ -1,6 +1,7 @@
 import 'package:a63sales/features/auth/registration.dart';
-import 'package:flutter/material.dart';
 import 'package:a63sales/utilz.dart';
+import 'package:a63sales/web_services.dart';
+import 'package:flutter/material.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -11,6 +12,11 @@ class Login extends StatefulWidget {
 
 class LoginState extends State<Login> {
   final _formKey = GlobalKey<FormState>();
+
+  final email = TextEditingController();
+  final password = TextEditingController();
+
+  var _isLoading = false;
 
   _body() {
     return SingleChildScrollView(
@@ -38,6 +44,7 @@ class LoginState extends State<Login> {
                     Container(
                       margin: EdgeInsets.all(10.0),
                       child: TextFormField(
+                        controller: email,
                         validator: (value) {
                           if (value.isEmpty) return 'Required Field';
                         },
@@ -55,6 +62,7 @@ class LoginState extends State<Login> {
                     Container(
                       margin: EdgeInsets.all(10.0),
                       child: TextFormField(
+                        controller: password,
                         validator: (value) {
                           if (value.isEmpty) {
                             return 'Required Field';
@@ -120,8 +128,16 @@ class LoginState extends State<Login> {
                           borderRadius: BorderRadius.circular(30.0)),
                       onPressed: () {
                         if (_formKey.currentState.validate()) {
-                          Utilz.saveUserData();
-                          Navigator.pop(context);
+                          setState(() {
+                            _isLoading = true;
+                          });
+                          Api.login(email.text, password.text).then((onValue) {
+                            setState(() {
+                            _isLoading = false;
+                          });
+                            Navigator.pop(context);
+                            Utilz.saveUserData();
+                          });
                         }
                       },
                       textColor: Colors.red,
@@ -147,7 +163,20 @@ class LoginState extends State<Login> {
         title: Text("Sign In"),
       ),
       body: Container(
-        child: _body(),
+        child: Stack(
+          children: <Widget>[
+            _body(),
+            Positioned(
+            child: _isLoading
+                ? Container(
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                    color: Colors.white.withOpacity(0.8),
+                  )
+                : Container()),
+          ],
+        ),
       ),
     );
   }
