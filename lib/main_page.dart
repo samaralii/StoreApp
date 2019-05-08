@@ -26,7 +26,7 @@ class MyAppState extends State<MyApp> {
   final List<Widget> _children = [
     Home(Colors.yellow),
     CartList(),
-    Account(Colors.blue),
+    Account(),
   ];
 
   final List<String> _titles = ["Home", "Cart", "Wishlist", "Account"];

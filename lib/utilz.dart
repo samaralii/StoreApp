@@ -1,3 +1,4 @@
+import 'package:a63sales/models/authObj.dart';
 import 'package:a63sales/models/detailObj.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert' as convert;
@@ -8,20 +9,25 @@ class Utilz {
   static const WISHLIST = "wishlist";
   static const USER_DATA = "user_data";
 
-  static Future<void> saveUserData() async {
+  static Future<void> saveUserData(AuthObj obj) async {
     final SharedPreferences pref = await SharedPreferences.getInstance();
-    pref.setString(USER_DATA, "user_data");
+    var json = convert.jsonEncode(obj);
+    // print(json);
+    pref.setString(USER_DATA, json);
   }
 
-  static Future<String> getUserData() async {
+  static Future<AuthObj> getUserData() async {
     final SharedPreferences pref = await SharedPreferences.getInstance();
-    var data = pref.getString(USER_DATA);
+    var json = pref.getString(USER_DATA);
 
-    if (data == null) {
+    if (json == null) {
       return null;
     }
 
-    return data;
+    var jsonResponse = convert.jsonDecode(json);
+    var authObj = AuthObj.fromJson(jsonResponse);
+
+    return authObj;
   }
 
   static Future<String> getCartJson() async {

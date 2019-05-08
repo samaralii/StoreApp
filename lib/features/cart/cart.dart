@@ -70,7 +70,14 @@ class CartListState extends State<CartList> with WidgetsBindingObserver {
                         _showEmptyCartDialog();
                         return;
                       }
-                      _showAuthDialog();
+
+                      Utilz.getUserData().then((onValue) {
+                        if (onValue == null) {
+                          _showAuthDialog();
+                        } else {
+                          openConfirmOrder(context);
+                        }
+                      });
                     },
                     child: Container(
                       height: 35,
@@ -119,6 +126,20 @@ class CartListState extends State<CartList> with WidgetsBindingObserver {
         });
   }
 
+  void openConfirmOrder(BuildContext context) {
+    Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ConfirmOrder(totalAmount().toString())))
+        .then((onValue) {
+      if (onValue) {
+        setState(() {
+          this.list = [];
+        });
+      }
+    });
+  }
+
   void _showAuthDialog() {
     showDialog(
         context: context,
@@ -131,18 +152,7 @@ class CartListState extends State<CartList> with WidgetsBindingObserver {
                 child: Text("Continue as a guest"),
                 onPressed: () {
                   Navigator.pop(context);
-                  Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  ConfirmOrder(totalAmount().toString())))
-                      .then((onValue) {
-                    if (onValue) {
-                      setState(() {
-                        this.list = [];
-                      });
-                    }
-                  });
+                  openConfirmOrder(context);
                 },
               ),
               FlatButton(
@@ -305,6 +315,4 @@ class CartListState extends State<CartList> with WidgetsBindingObserver {
       body: _body(),
     );
   }
-
-  
 }

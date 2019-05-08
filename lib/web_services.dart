@@ -48,17 +48,22 @@ class Api {
     var response = await http.post(url, body: body);
 
     if (response.statusCode == 200) {
-      var jsonResponse = convert.jsonDecode(response.body);
-      var authObj = AuthObj.fromJson(jsonResponse);
-      print(authObj.status);
-      return authObj;
+      try {
+        var jsonResponse = convert.jsonDecode(response.body);
+        var authObj = AuthObj.fromJson(jsonResponse);
+        print(authObj.status);
+        return authObj;
+      } catch (e) {
+        print(e);
+        return null;
+      }
     }
 
     return null;
   }
 
-  static Future<String> registration(String fName, String lName,
-      String address, String email, String username, String password) async {
+  static Future<String> registration(String fName, String lName, String address,
+      String email, String username, String password) async {
     var url = "${BASEURL}register";
 
     Map<String, String> body = {

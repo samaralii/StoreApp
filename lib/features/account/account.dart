@@ -1,9 +1,29 @@
+import 'package:a63sales/features/auth/login.dart';
+import 'package:a63sales/features/auth/registration.dart';
+import 'package:a63sales/models/authObj.dart';
 import 'package:flutter/material.dart';
 import 'package:a63sales/utilz.dart';
 
-class Account extends StatelessWidget {
-  final Color color;
-  Account(this.color);
+class Account extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return AccountState();
+  }
+}
+
+class AccountState extends State<Account> {
+  AuthObj userData;
+
+  @override
+  initState() {
+    super.initState();
+    Utilz.getUserData().then((onValue) {
+      if (onValue != null) {
+        userData = onValue;
+        setState(() {});
+      }
+    });
+  }
 
   Widget _topView() {
     return Container(
@@ -22,7 +42,7 @@ class Account extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    "John Doe",
+                    "${userData.data.firstname} ${userData.data.lastname}",
                     style: TextStyle(
                         fontSize: 25.0,
                         color: Colors.black,
@@ -131,6 +151,9 @@ class Account extends StatelessWidget {
                 onPressed: () {
                   Utilz.deleteUserData();
                   Navigator.pop(context);
+                  setState(() {
+                    userData = null;
+                  });
                 },
               ),
               FlatButton(
@@ -146,22 +169,64 @@ class Account extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: <Widget>[
-          _topView(),
-          _customButton("My Wishlist"),
-          _customButton("Orders"),
-          _customButton("Returns"),
-          _customButton("Wallet"),
-          _customButton("Accounts details"),
-          _customButton("Preferences"),
-          _customButton("Shipping Information"),
-          _customButton("Security"),
-          _customButton("FAQ"),
-          _logoutBtn("Logout", context),
-        ],
-      ),
-    );
+    return userData == null
+        ? Container(
+            margin: EdgeInsets.only(top: 200.0),
+            child: Center(
+              child: Column(
+                children: <Widget>[
+                  ButtonTheme(
+                    minWidth: 180.0,
+                    child: RaisedButton(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(3.0)),
+                      onPressed: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => Login()));
+                      },
+                      textColor: Colors.red,
+                      color: Colors.yellow,
+                      padding: EdgeInsets.all(8.0),
+                      child: Text("Login"),
+                    ),
+                  ),
+                  ButtonTheme(
+                    minWidth: 180.0,
+                    child: RaisedButton(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(3.0)),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Registration()));
+                      },
+                      textColor: Colors.red,
+                      color: Colors.yellow,
+                      padding: EdgeInsets.all(8.0),
+                      child: Text("Registration"),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          )
+        : SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                _topView(),
+                _customButton("My Wishlist"),
+                _customButton("Orders"),
+                _customButton("Returns"),
+                _customButton("Wallet"),
+                _customButton("Accounts details"),
+                _customButton("Preferences"),
+                _customButton("Shipping Information"),
+                _customButton("Security"),
+                _customButton("FAQ"),
+                _logoutBtn("Logout", context),
+              ],
+            ),
+          );
   }
 }

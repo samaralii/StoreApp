@@ -4,6 +4,11 @@ class AuthObj {
 
   AuthObj({this.status, this.data});
 
+  Map<String, dynamic> toJson() => {
+        "status": status,
+        "data": data.toJson(),
+      };
+
   factory AuthObj.fromJson(Map<String, dynamic> parsedJson) {
     return AuthObj(
         status: parsedJson['status'], data: Data.fromJson(parsedJson['data']));
@@ -25,6 +30,15 @@ class Data {
       this.username,
       this.email,
       this.address});
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "firstname": firstname,
+        "lastname": lastname,
+        "username": username,
+        "address": address,
+        "email": email,
+      };
 
   factory Data.fromJson(Map<String, dynamic> parsedJson) {
     return Data(

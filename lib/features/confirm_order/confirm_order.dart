@@ -1,3 +1,4 @@
+import 'package:a63sales/models/authObj.dart';
 import 'package:flutter/material.dart';
 import 'package:a63sales/models/detailObj.dart';
 import 'package:a63sales/utilz.dart';
@@ -19,6 +20,7 @@ class ConfirmOrderState extends State<ConfirmOrder> {
   List<DetailDataObj> list = [];
   int _radioValue1 = 0;
   var _isLoading = false;
+  AuthObj userData;
 
   final firstName = TextEditingController();
   final lastName = TextEditingController();
@@ -40,6 +42,18 @@ class ConfirmOrderState extends State<ConfirmOrder> {
       if (list != null && list.isNotEmpty) {
         setState(() {
           this.list = list;
+        });
+      }
+    });
+
+    Utilz.getUserData().then((onValue) {
+      if (onValue != null) {
+        userData = onValue;
+        setState(() {
+          firstName.text = userData.data.firstname;
+          lastName.text = userData.data.lastname;
+          email.text = userData.data.email;
+          address.text = userData.data.address;
         });
       }
     });

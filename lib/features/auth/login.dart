@@ -133,10 +133,12 @@ class LoginState extends State<Login> {
                           });
                           Api.login(email.text, password.text).then((onValue) {
                             setState(() {
-                            _isLoading = false;
-                          });
-                            Navigator.pop(context);
-                            Utilz.saveUserData();
+                              _isLoading = false;
+                            });
+                            if (onValue != null) {
+                              Navigator.pop(context);
+                              Utilz.saveUserData(onValue);
+                            }
                           });
                         }
                       },
@@ -167,14 +169,14 @@ class LoginState extends State<Login> {
           children: <Widget>[
             _body(),
             Positioned(
-            child: _isLoading
-                ? Container(
-                    child: Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                    color: Colors.white.withOpacity(0.8),
-                  )
-                : Container()),
+                child: _isLoading
+                    ? Container(
+                        child: Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                        color: Colors.white.withOpacity(0.8),
+                      )
+                    : Container()),
           ],
         ),
       ),
